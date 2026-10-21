@@ -73,9 +73,17 @@ nav { height:58px; display:flex; align-items:center; justify-content:space-betwe
 .dist-inp { background:var(--bg); border:1.5px solid var(--border); border-radius:8px; padding:8px 10px; color:var(--text); font-family:'JetBrains Mono',monospace; font-size:.95rem; font-weight:600; width:100%; text-align:center; }
 .dist-inp:focus { outline:none; border-color:var(--accent); background:var(--accent-glow); }
 .dist-inp::placeholder { color:rgba(255,255,255,.15); font-weight:400; }
+.sw-row { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:6px; }
+.sw { height:28px; border-radius:7px; border:1.5px solid rgba(0,0,0,.15); cursor:pointer; padding:0; position:relative; transition:transform .1s; }
+.sw:hover { transform:scale(1.08); }
+.sw.sel { outline:2.5px solid #2563eb; outline-offset:1.5px; }
+.sw.sel::after { content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:var(--ck,#fff); }
+.sw.used { opacity:.28; }
+.sw-label { font-size:.62rem; color:#64748b; margin-top:3px; min-height:.9em; }
+.rk-color { display:inline-block; width:10px; height:10px; border-radius:50%; margin-left:6px; vertical-align:middle; border:1px solid rgba(255,255,255,.4); }
 .sum-cell { text-align:center; }
 .sum-num { font-family:'JetBrains Mono',monospace; font-size:.95rem; font-weight:600; color:var(--gold); }
-.sum-num.empty { color:var(--muted); font-size:.78rem; font-weight:400; }
+.sum-num.sum-empty { color:var(--muted); font-size:.78rem; font-weight:400; }
 .sum-lbl { font-size:.62rem; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-top:2px; }
 .del-btn { background:none; border:none; color:var(--muted); cursor:pointer; padding:7px; border-radius:7px; display:flex; align-items:center; justify-content:center; margin:4px auto 0; }
 .del-btn:hover { color:var(--danger); background:rgba(239,68,68,.08); }
@@ -285,6 +293,7 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.06), inset 0 -2px 3px rgba(0,0,0,.6); }
 .goal-puck-top::after { content:''; position:absolute; inset:3px 8px; border-radius:50%; border:1px solid rgba(255,255,255,.1); }
 
+.rink-more { text-align:center; font-size:.72rem; font-weight:700; color:#46627f; padding:12px 0 4px; letter-spacing:.3px; }
 .rink-lanes { position:relative; padding:0 52px 0 14px; display:flex; flex-direction:column; gap:6px; }
 .ln { position:relative; }
 .ln-head { display:flex; align-items:center; gap:8px; padding:0 4px 0 2px; height:22px; }
@@ -296,7 +305,7 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 .ln-name { font-size:.78rem; font-weight:700; color:#0f2540; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
 .ln-val { margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:700; color:#0f2540;
   background:rgba(255,255,255,.7); border:1px solid rgba(15,40,70,.1); padding:1px 7px; border-radius:6px; flex-shrink:0; }
-.ln-val.empty { color:#7c93ab; font-weight:500; }
+.ln-val.ln-empty { color:#7c93ab; font-weight:500; }
 .ln-track { position:relative; height:78px; border-bottom:1px dashed rgba(30,70,110,.18); }
 .iron-wrap { position:absolute; bottom:2px; width:156px; height:78px; transition:left 1.4s cubic-bezier(.22,.61,.36,1), transform 1.4s cubic-bezier(.22,.61,.36,1); will-change:left; }
 .iron-wrap svg { width:156px; height:78px; display:block; overflow:visible; }
@@ -559,13 +568,19 @@ function makeSyncThumb(dataUrl, cb){
   };
   img.src = dataUrl;
 }
+// Firebase-Pfade: Spielstand (klein, bei jeder Eingabe) und Logos (groß, nur bei Änderung)
+const statePath=db=>`${db}/buegeleisencup/state.json`;
+const logoPath=(db,id)=>`${db}/buegeleisencup/logos/${id}.json`;
+const logoAllPath=db=>`${db}/buegeleisencup/logos.json`;
+
 function teamsForSync(){
-  return teams.map(t=>({ id:t.id, name:t.name, emoji:t.emoji, color:t.color, run1:t.run1, run2:t.run2, photoThumb:t.photoThumb||null }));
+  return teams.map(t=>({ id:t.id, name:t.name, emoji:t.emoji, color:t.color, run1:t.run1, run2:t.run2, c1:t.c1||null, c2:t.c2||null, logoV:(t.photo&&t.logoV)||null }));
 }
+// Lokal speichern: Logos getrennt vom Spielstand (spart Platz im Browser-Speicher)
 function savePhotosLocally(){
   const photoMap={};
   teams.forEach(t=>{ if(t.photo){ photoMap[t.id]=t.photo; photoCacheSet(t.id,t.photo); } });
-  try{ localStorage.setItem('iron26_photos', JSON.stringify(photoMap)); }catch(e){}
+  try{ localStorage.setItem('iron26_photos', JSON.stringify(photoMap)); }catch(e){ console.warn('Logo-Speicher voll',e); }
 }
 function loadPhotosFromLocal(){
   try{
@@ -574,17 +589,64 @@ function loadPhotosFromLocal(){
     teams.forEach(t=>{ t.photo = photoCacheGet(t.id) || t.photoThumb || null; });
   }catch(e){}
 }
+async function pushLogo(t){
+  if(!syncReady()||!t||!t.photo) return;
+  try{
+    const r=await fetch(logoPath(syncConfig().dbUrl,t.id),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(t.photo)});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+  }catch(e){ console.warn('Logo push error:',e); setStatus('error'); }
+}
+async function deleteLogo(id){
+  if(!syncReady()) return;
+  try{ await fetch(logoPath(syncConfig().dbUrl,id),{method:'DELETE'}); }catch(e){}
+}
 async function syncPush(){
   if(!syncReady()) return;
   const c=syncConfig();
   try{
     const payload={ teams:teamsForSync(), nextId };
     lastSyncHash=JSON.stringify(payload);
-    const r=await fetch(`${c.dbUrl}/buegeleisencup.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const r=await fetch(statePath(c.dbUrl),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(!r.ok) throw new Error('HTTP '+r.status);
     setStatus('connected');
   }catch(e){ console.warn('Sync push error:',e); setStatus('error'); }
 }
+
+// Zuschauer: Logos nur nachladen, wenn sich ihre Version geändert hat
+function loadLogoVersions(){ try{ return JSON.parse(localStorage.getItem('iron26_logoV')||'{}'); }catch(e){ return {}; } }
+function saveLogoVersions(m){ try{ localStorage.setItem('iron26_logoV',JSON.stringify(m)); }catch(e){} }
+const _logoFetching=new Set(); const _logoRetry={};
+let _rerenderT=null;
+function scheduleRerender(){
+  clearTimeout(_rerenderT);
+  _rerenderT=setTimeout(()=>{
+    if(!isResultsView){ const f=document.activeElement; if(!f||!f.classList.contains('dist-inp')) renderAdmin(); }
+    if(document.getElementById('resultsPage').classList.contains('active')) renderResults();
+  },250);
+}
+async function fetchMissingLogos(){
+  if(!syncReady()) return;
+  const db=syncConfig().dbUrl, vers=loadLogoVersions();
+  const need=teams.filter(t=>t.logoV && vers[t.id]!==t.logoV && !_logoFetching.has(t.id+':'+t.logoV));
+  for(const t of need){
+    const key=t.id+':'+t.logoV; _logoFetching.add(key);
+    try{
+      const r=await fetch(logoPath(db,t.id)); const img=r.ok?await r.json():null;
+      if(!img){ const n=(_logoRetry[t.id]||0)+1; _logoRetry[t.id]=n; if(n<=5) setTimeout(fetchMissingLogos,3000); }
+      if(img && typeof img==='string'){
+        delete _logoRetry[t.id];
+        photoCacheSet(t.id,img);
+        const cur=teams.find(x=>x.id===t.id); if(cur) cur.photo=img;
+        let pm={}; try{ pm=JSON.parse(localStorage.getItem('iron26_photos')||'{}'); }catch(e){}
+        pm[t.id]=img; try{ localStorage.setItem('iron26_photos',JSON.stringify(pm)); }catch(e){}
+        const v=loadLogoVersions(); v[t.id]=t.logoV; saveLogoVersions(v);
+        scheduleRerender();
+      }
+    }catch(e){}
+    _logoFetching.delete(key);
+  }
+}
+
 function applyRemoteData(data){
   if(!data) return;
   let rawTeams=data.teams;
@@ -596,62 +658,59 @@ function applyRemoteData(data){
   const hash=JSON.stringify(safe);
   if(hash===lastSyncHash) return;
   lastSyncHash=hash;
-  const oldThumbs={}; teams.forEach(t=>{ if(t.photoThumb) oldThumbs[t.id]=t.photoThumb; });
+  // Admin behält eigene Logos; alle anderen übernehmen den entfernten Stand
+  const ownLogos={}; teams.forEach(t=>{ if(t.photo) ownLogos[t.id]={photo:t.photo,logoV:t.logoV}; });
   teams=safe.teams;
-  teams.forEach(t=>{ if(!t.photoThumb && oldThumbs[t.id]) t.photoThumb=oldThumbs[t.id]; });
   nextId=safe.nextId || Math.max(0,...safe.teams.map(t=>t.id||0))+1;
-  const pm={}; try{ Object.assign(pm, JSON.parse(localStorage.getItem('iron26_photos')||'{}')); }catch(e){}
-  teams.forEach(t=>{ if(t.photoThumb && !pm[t.id]) pm[t.id]=t.photoThumb; });
-  try{ localStorage.setItem('iron26_photos', JSON.stringify(pm)); }catch(e){}
   loadPhotosFromLocal();
-  setStatus('connected');
   if(!isResultsView){
-    const focused=document.activeElement;
-    if(!focused || !focused.classList.contains('dist-inp')) renderAdmin();
+    teams.forEach(t=>{ const o=ownLogos[t.id]; if(o && (!t.logoV || t.logoV===o.logoV)){ t.photo=o.photo; t.logoV=o.logoV||t.logoV; } });
   }
-  if(document.getElementById('resultsPage').classList.contains('active')) renderResults();
-  const missingThumbs=teams.filter(t=>t.photo && !t.photoThumb);
-  if(missingThumbs.length>0){
-    let done=0;
-    missingThumbs.forEach(t=>{ makeSyncThumb(t.photo, thumb=>{ t.photoThumb=thumb; if(++done===missingThumbs.length){ lastSyncHash=''; syncPush(); } }); });
-  }
+  setStatus('connected');
+  scheduleRerender();
+  fetchMissingLogos();
 }
 function syncStart(){
   if(fbEventSource){ fbEventSource.close(); fbEventSource=null; }
   const c=syncConfig(); if(!c) return;
-  const sseUrl=`${c.dbUrl}/buegeleisencup.json`;
-  fbEventSource=new EventSource(sseUrl);
+  fbEventSource=new EventSource(statePath(c.dbUrl));
   let errTimer=null;
   function onSuccess(){ if(errTimer){ clearTimeout(errTimer); errTimer=null; } setStatus('connected'); }
-  fbEventSource.addEventListener('put', e=>{ try{ const msg=JSON.parse(e.data); if(msg.data) applyRemoteData(msg.data); onSuccess(); }catch(err){} });
-  fbEventSource.addEventListener('patch', e=>{ try{ const msg=JSON.parse(e.data); if(msg.data) applyRemoteData(msg.data); onSuccess(); }catch(err){} });
+  fbEventSource.addEventListener('put', e=>{ try{ const msg=JSON.parse(e.data); if(msg.path==='/' && msg.data) applyRemoteData(msg.data); onSuccess(); }catch(err){} });
+  fbEventSource.addEventListener('patch', e=>{ try{ onSuccess(); fetch(statePath(c.dbUrl)).then(r=>r.json()).then(applyRemoteData).catch(()=>{}); }catch(err){} });
   fbEventSource.onerror=()=>{ if(!errTimer){ errTimer=setTimeout(()=>{ setStatus('error'); errTimer=null; },10000); } };
 }
 
 let _saveDebounce=null;
 function save(){
-  const data={ teams, nextId };
+  // Spielstand ohne Bilder lokal speichern; Logos separat
+  const data={ teams:teams.map(t=>{ const {photo,photoThumb,...rest}=t; return rest; }), nextId };
   try{ localStorage.setItem('iron26', JSON.stringify(data)); }catch(e){}
   savePhotosLocally();
-  const pending=teams.filter(t=>t.photo && !t.photoThumb);
-  if(pending.length===0){ if(syncReady()) syncPush(); }
-  else{
-    let done=0;
-    pending.forEach(t=>{
-      const capturedId=t.id;
-      makeSyncThumb(t.photo, thumb=>{
-        const current=teams.find(x=>x.id===capturedId);
-        if(current) current.photoThumb=thumb;
-        photoCacheSet(capturedId, current?current.photo:t.photo);
-        if(++done===pending.length){ if(syncReady()) syncPush(); }
-      });
-    });
-  }
+  if(syncReady()) syncPush();
 }
+// Logo eines Teams wurde neu gesetzt: Version erhöhen, Logo einmalig hochladen, Stand pushen
+async function logoChanged(t){
+  t.logoV=Date.now(); photoCacheSet(t.id,t.photo);
+  const v=loadLogoVersions(); v[t.id]=t.logoV; saveLogoVersions(v);
+  savePhotosLocally();
+  await pushLogo(t);   // erst das Logo, dann den Spielstand mit neuer Logo-Version
+  save();
+}
+// Einmalige Umstellung: bereits vorhandene Logos ohne Version hochladen
+async function migrateLogos(){
+  if(isResultsView||!syncReady()) return;
+  const todo=teams.filter(t=>t.photo && !t.logoV);
+  if(!todo.length) return;
+  for(const t of todo){ t.logoV=Date.now()+t.id; await pushLogo(t); }
+  const v=loadLogoVersions(); todo.forEach(t=>v[t.id]=t.logoV); saveLogoVersions(v);
+  save();
+}
+
 function load(){
   try{
     const d=JSON.parse(localStorage.getItem('iron26')||'null');
-    if(d && d.teams){ teams=d.teams; nextId=d.nextId||1; }
+    if(d && d.teams){ teams=d.teams.map(t=>{ const {photoThumb,...r}=t; return r; }); nextId=d.nextId||1; }
   }catch(e){}
   loadPhotosFromLocal();
   if(!teams.length){
@@ -692,12 +751,12 @@ async function saveSetup(){
   const btn=document.getElementById('connectBtn');
   if(btn){ btn.textContent='Verbinde...'; btn.disabled=true; }
   try{
-    const testR=await fetch(`${dbUrl}/buegeleisencup.json`);
+    const testR=await fetch(statePath(dbUrl));
     if(!testR.ok && testR.status!==404) throw new Error('Datenbank nicht erreichbar (HTTP '+testR.status+').\n\nBitte URL prüfen und Testmodus aktivieren.');
     syncSaveConfig({dbUrl});
     const existing=await testR.json();
     if(!existing || !existing.teams){
-      await fetch(`${dbUrl}/buegeleisencup.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({teams:teamsForSync(),nextId})});
+      await fetch(statePath(dbUrl),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({teams:teamsForSync(),nextId})});
     }
     if(btn){ btn.textContent='✓ Verbinden'; btn.disabled=false; }
     syncStart(); renderQR(); setStatus('connected'); wizGoto(3);
@@ -708,24 +767,11 @@ async function saveSetup(){
 }
 async function repushAllThumbs(){
   if(!syncReady()){ alert('Kein Sync aktiv.'); return; }
-  let photoMap={}; try{ photoMap=JSON.parse(localStorage.getItem('iron26_photos')||'{}'); }catch(e){}
-  const ids=Object.keys(photoMap).filter(id=>photoMap[id]);
-  if(!ids.length){ alert('Keine lokalen Fotos gefunden.'); return; }
-  let done=0;
-  ids.forEach(id=>{
-    makeSyncThumb(photoMap[id], thumb=>{
-      const team=teams.find(t=>String(t.id)===String(id));
-      if(team) team.photoThumb=thumb;
-      if(++done===ids.length){
-        lastSyncHash='';
-        const c=syncConfig(); const payload={teams:teamsForSync(),nextId};
-        lastSyncHash=JSON.stringify(payload);
-        fetch(`${c.dbUrl}/buegeleisencup.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-          .then(r=>{ if(r.ok){ setStatus('connected'); alert(`✅ ${ids.length} Foto(s) erfolgreich zu Firebase gepusht.`); } else r.text().then(t=>alert('❌ Firebase Fehler '+r.status+':\n'+t)); })
-          .catch(e=>alert('❌ Netzwerkfehler:\n'+e.message));
-      }
-    });
-  });
+  const withLogo=teams.filter(t=>t.photo);
+  if(!withLogo.length){ alert('Keine lokalen Logos gefunden.'); return; }
+  for(const t of withLogo){ t.logoV=Date.now()+t.id; await pushLogo(t); }
+  const v=loadLogoVersions(); withLogo.forEach(t=>v[t.id]=t.logoV); saveLogoVersions(v);
+  save(); alert(`✅ ${withLogo.length} Logo(s) zu Firebase übertragen.`);
 }
 
 // ══════════════ DISTANZ-LOGIK (statt Zeit) ══════════════
@@ -735,7 +781,9 @@ function ft(n){ return n===null?'—':n.toFixed(1).replace('.',',')+' cm'; }
 function sum(t){ const a=pt(t.run1),b=pt(t.run2); return a!==null&&b!==null?(a+b):null; }
 function sortKey(t){ const s=sum(t); if(s!==null) return s; const r1=pt(t.run1),r2=pt(t.run2); return r1!==null?r1:r2!==null?r2:null; }
 // Lauf-2-Phase: sobald ein Team einen zweiten Wert hat oder alle Lauf 1 haben
-function inRun2(){ return teams.length>0 && (teams.some(t=>pt(t.run2)!==null) || teams.every(t=>pt(t.run1)!==null)); }
+function inRun2(){ return teams.some(t=>pt(t.run2)!==null); }
+// Lauf 2 hat begonnen oder steht bevor (Lauf 1 komplett) – für Spielfarben
+function run2Active(){ return teams.length>0 && (inRun2() || teams.every(t=>pt(t.run1)!==null)); }
 // Stufe: 0 = vergleichbar (Lauf 1: hat L1 / Lauf 2: hat beide), 1 = nur ein Lauf in Lauf-2-Phase, 2 = kein Wert
 function tier(t){ const k=sortKey(t); if(k===null) return 2; if(inRun2() && sum(t)===null) return 1; return 0; }
 function ranked(){ return [...teams].sort((a,b)=>{ const ta=tier(a),tb=tier(b); if(ta!==tb) return ta-tb; if(ta===2) return 0; return sortKey(a)-sortKey(b); }); }
@@ -756,6 +804,27 @@ function gotoPage(p,el){
     renderResults();
     if(syncReady() && (!fbEventSource || fbEventSource.readyState===EventSource.CLOSED)) syncStart();
   }
+}
+
+// ── SPIELFARBEN (Farbe der Bügeleisen je Lauf) ──
+const PLAY_COLORS=[{n:'Rot',h:'#dc2626'},{n:'Gelb',h:'#facc15'},{n:'Blau',h:'#2563eb'},{n:'Grün',h:'#16a34a'}];
+const colorName=h=>(PLAY_COLORS.find(c=>c.h===h)||{}).n||'';
+function swatchRow(t,key){
+  const sel=t[key]||'';
+  return `<div class="sw-row">${PLAY_COLORS.map(c=>{
+    const light=c.h==='#facc15';
+    return `<button type="button" class="sw${sel===c.h?' sel':''}" style="background:${c.h};--ck:${light?'#111':'#fff'}" title="${c.n}" onclick="setPlayColor(${t.id},'${key}','${c.h}')"></button>`;
+  }).join('')}</div><div class="sw-label">${sel?'Spielfarbe: '+colorName(sel):'Spielfarbe wählen'}</div>`;
+}
+function setPlayColor(id,key,h){
+  const t=teams.find(x=>x.id===id); if(!t) return;
+  t[key]= t[key]===h ? null : h;   // erneutes Tippen hebt Auswahl auf
+  save(); renderAdmin();
+}
+// Farbe des aktuellen Laufs: in Lauf 2 die Lauf-2-Farbe (sonst Lauf 1), sonst Teamfarbe
+function playColor(t){
+  if(run2Active()) return t.c2||t.c1||t.color;
+  return t.c1||t.color;
 }
 
 // ── ADMIN ──
@@ -779,13 +848,15 @@ function renderAdmin(){
       <div class="dist-block">
         <div class="dist-label">Lauf 1 (cm)</div>
         <input class="dist-inp" type="text" inputmode="decimal" placeholder="0,0" value="${t.run1}" oninput="upd(${t.id},'run1',this.value)" style="${t.run1?'border-color:'+t.color+'90':''}">
+        ${swatchRow(t,'c1')}
       </div>
       <div class="dist-block">
         <div class="dist-label">Lauf 2 (cm)</div>
         <input class="dist-inp" type="text" inputmode="decimal" placeholder="0,0" value="${t.run2}" oninput="upd(${t.id},'run2',this.value)" style="${t.run2?'border-color:'+t.color+'90':''}">
+        ${swatchRow(t,'c2')}
       </div>
       <div class="sum-cell">
-        <div class="sum-num ${s!==null?'':'empty'}" id="sum-${t.id}">${s!==null?ft(s):'—'}</div>
+        <div class="sum-num ${s!==null?'':'sum-empty'}" id="sum-${t.id}">${s!==null?ft(s):'—'}</div>
         <div class="sum-lbl">Summe</div>
         <button class="del-btn" onclick="delTeam(${t.id})" title="Löschen">
           <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 3h12M5 3V2h4v1M2 3l1 9h6l1-9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -803,11 +874,10 @@ function attachAvatarListeners(){
       inp._bound=true;
       inp.addEventListener('change', function(e){
         const f=e.target.files && e.target.files[0]; if(!f) return;
-        resizeAndLoad(f,500,function(dataUrl){
+        resizeAndLoad(f,320,function(dataUrl){
           const team=teams.find(x=>x.id===t.id); if(!team) return;
-          team.photo=dataUrl; team.photoThumb=null;
-          photoCacheSet(team.id,dataUrl);
-          try{ save(); }catch(err){}
+          team.photo=dataUrl;
+          try{ logoChanged(team); }catch(err){}
           renderAdmin();
         },function(){});
       });
@@ -842,10 +912,10 @@ function upd(id,run,val){
   const t=teams.find(x=>x.id===id); if(!t) return;
   t[run]=val;
   const s=sum(t); const el=document.getElementById('sum-'+id);
-  if(el){ el.textContent=s!==null?ft(s):'—'; el.className='sum-num'+(s!==null?'':' empty'); }
+  if(el){ el.textContent=s!==null?ft(s):'—'; el.className='sum-num'+(s!==null?'':' sum-empty'); }
   clearTimeout(_saveDebounce); _saveDebounce=setTimeout(()=>save(),600);
 }
-function delTeam(id){ if(!confirm('Mannschaft wirklich löschen?')) return; teams=teams.filter(x=>x.id!==id); save(); renderAdmin(); }
+function delTeam(id){ if(!confirm('Mannschaft wirklich löschen?')) return; teams=teams.filter(x=>x.id!==id); save(); deleteLogo(id); renderAdmin(); }
 
 let _dragId=null,_touchClone=null,_touchDragId=null;
 function initDragDrop(){
@@ -915,7 +985,7 @@ function pickEmoji(el,e){ document.querySelectorAll('.em-opt').forEach(x=>x.clas
 function handlePhoto(e){
   const f=e.target.files && e.target.files[0]; if(!f) return;
   const errEl=document.getElementById('photoError'); if(errEl) errEl.style.display='none';
-  resizeAndLoad(f,500,function(dataUrl){
+  resizeAndLoad(f,320,function(dataUrl){
     photoDataUrl=dataUrl;
     const img=document.getElementById('photoPreviewImg'), ph=document.getElementById('photoPlaceholder');
     if(img){ img.src=dataUrl; img.style.display='block'; } if(ph) ph.style.display='none';
@@ -932,8 +1002,10 @@ function addTeam(){
   const name=document.getElementById('mName').value.trim();
   if(!name){ document.getElementById('mName').focus(); return; }
   const color=nextFreeColor();
-  teams.push({id:nextId++,name,emoji:selEmoji,color,photo:emblMode==='photo'?photoDataUrl:null,run1:'',run2:''});
-  save(); closeModal(); renderAdmin();
+  const nt={id:nextId++,name,emoji:selEmoji,color,photo:emblMode==='photo'?photoDataUrl:null,run1:'',run2:''};
+  teams.push(nt);
+  if(nt.photo) logoChanged(nt); else save();
+  closeModal(); renderAdmin();
 }
 
 function currentRunPhase(){
@@ -972,21 +1044,26 @@ function renderResults(){
 
   const prev={};
   lanes.querySelectorAll('.iron-wrap').forEach(el=>prev[el.dataset.id]=el.style.left);
-  lanes.innerHTML=r.map((t,i)=>{
+  // Bei vielen Teams nur die besten auf dem Eis zeigen; vollständige Liste in der Rangliste
+  const RINK_MAX=10;
+  const onIce=r.length>RINK_MAX+2 ? r.slice(0,RINK_MAX) : r;
+  const rest=r.length-onIce.length;
+  lanes.innerHTML=onIce.map((t,i)=>{
     const rank=i+1, k=sortKey(t), s=sum(t);
     const startPct=prev[t.id]||'0%';
-    const val = s!==null ? ft(s) : (k!==null ? ft(k)+' · nur L'+(pt(t.run1)!==null?1:2) : '—');
+    const val = s!==null ? ft(s) : (k!==null ? ft(k)+(inRun2()?' · nur L'+(pt(t.run1)!==null?1:2):'') : '—');
     return `<div class="ln${rank===1&&tier(t)===0?' first':''}">
       <div class="ln-head">
         <span class="ln-rank ${tier(t)===0&&rank<=3?'r'+rank:''}">${rank}</span>
         <span class="ln-name">${t.name}</span>
-        <span class="ln-val${k===null?' empty':''}">${val}</span>
+        <span class="ln-val${k===null?' ln-empty':''}">${val}</span>
       </div>
       <div class="ln-track">
         <div class="iron-wrap" data-id="${t.id}" data-pct="${pctOf(t)}" style="left:${startPct};transform:translateX(-${startPct})">${ironSVG(t)}</div>
       </div>
     </div>`;
   }).join('');
+  if(rest>0) lanes.innerHTML+=`<div class="rink-more">+ ${rest} weitere Teams – vollständige Rangliste unten ↓</div>`;
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     lanes.querySelectorAll('.iron-wrap').forEach(el=>{ const p=el.dataset.pct+'%'; el.style.left=p; el.style.transform=`translateX(-${p})`; });
   }));
@@ -995,11 +1072,11 @@ function renderResults(){
     const r1=pt(t.run1), r2=pt(t.run2), s=sum(t), k=sortKey(t), rank=i+1;
     const cls = tier(t)===0 && rank<=3 ? 'p'+rank : '';
     const medal = tier(t)===0 ? (rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank) : rank;
-    return `<div class="rk-row ${cls}" style="--tc:${t.color}">
+    return `<div class="rk-row ${cls}" style="--tc:${playColor(t)}">
       <div class="rk-pos">${medal}</div>
       <div class="rk-av">${emblInner(t,46,0)}</div>
       <div style="min-width:0">
-        <div class="rk-name">${t.name}</div>
+        <div class="rk-name">${t.name}${(t.c1||t.c2)?`<span class="rk-color" style="background:${playColor(t)}" title="Spielfarbe: ${colorName(playColor(t))}"></span>`:''}</div>
         <div class="rk-runs">
           <span class="rk-run"><b>L1</b>${r1!==null?ft(r1):'—'}</span>
           <span class="rk-run"><b>L2</b>${r2!==null?ft(r2):'—'}</span>
@@ -1019,7 +1096,7 @@ function shade(hex,amt){
   return `rgb(${r},${g},${b})`;
 }
 function ironSVG(t){
-  const c=t.color, u='i'+t.id;
+  const c=playColor(t), u='i'+t.id;
   const hi=shade(c,.45), mid=c, lo=shade(c,-.45);
   const photo=photoCacheGet(t.id)||t.photo||t.photoThumb;
   const embl = photo
@@ -1104,7 +1181,16 @@ if(isResultsView){
 (async function(){
   if(syncReady()){
     if(!isResultsView){
-      try{ const r=await fetch(`${syncConfig().dbUrl}/buegeleisencup.json`); const d=r.ok?await r.json():null; if(!d||!d.teams) await syncPush(); }catch(e){}
+      try{
+        const db=syncConfig().dbUrl;
+        const r=await fetch(statePath(db)); const d=r.ok?await r.json():null;
+        if(!d||!d.teams){
+          await syncPush();
+          // Altbestand aus früherer Version (Daten direkt unter /buegeleisencup) aufräumen
+          fetch(`${db}/buegeleisencup.json`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({teams:null,nextId:null})}).catch(()=>{});
+        }
+        await migrateLogos();
+      }catch(e){}
     }
     setStatus('connected'); syncStart();
   }
