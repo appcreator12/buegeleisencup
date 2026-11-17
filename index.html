@@ -477,6 +477,12 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
   .now-t svg { width:72px; height:36px; }
   .champ-n { font-size:1.35rem; }
 }
+
+/* Lange Teamnamen (z. B. „Sparkasse Meißen Team 1“) vollständig zeigen statt mit „…“ abzuschneiden */
+.ln-name, .rk-name, .ko-nm, .now-nm, .kb-nm, .ko-prev span, .ko-st, .rs-ellip { white-space:normal; overflow:visible; text-overflow:clip; overflow-wrap:anywhere; line-height:1.22; }
+.ln-head { height:auto; min-height:22px; padding-top:2px; padding-bottom:2px; }
+.rs-ellip { font-size:.85rem; }
+@media (max-width:640px){ .rs-ellip { font-size:.74rem; } .rk-name { font-size:.84rem; } }
 </style>
 </head>
 <body class="admin-mode">
@@ -1891,8 +1897,9 @@ async function downloadStartaufstellung(){
   const cw=(W-28-6)/2, laneH=11, ch=8+2*laneH+3, gap=4;
   let y=62, col=0;
   const fitName=(txt,maxW)=>{ let fs=9; doc.setFont(PFONT(),'bold'); doc.setFontSize(fs);
-    while(doc.getTextWidth(txt)>maxW&&fs>7){ fs-=0.5; doc.setFontSize(fs); }
-    let s=txt; while(doc.getTextWidth(s)>maxW&&s.length>3) s=s.slice(0,-2)+'…'; return s; };
+    while(doc.getTextWidth(txt)>maxW&&fs>6){ fs-=0.25; doc.setFontSize(fs); }
+    // falls immer noch zu lang: in der Mitte kürzen, damit das Ende (z. B. „Team 2“) sichtbar bleibt
+    let s=txt; if(doc.getTextWidth(s)>maxW){ const tail=txt.slice(-8); let head=txt.slice(0,-8); while(doc.getTextWidth(head+'…'+tail)>maxW&&head.length>3) head=head.slice(0,-1); s=head.trimEnd()+'…'+tail; } return s; };
   const hex=h=>{ const v=String(h||'').replace('#',''); return v.length===6?[parseInt(v.slice(0,2),16),parseInt(v.slice(2,4),16),parseInt(v.slice(4,6),16)]:[148,163,184]; };
   groups.forEach((g,gi)=>{
     if(y+ch>H-16){ doc.addPage('a4','portrait'); rotHead(doc,'Spielplan Vorrunde'); y=56; col=0; }
