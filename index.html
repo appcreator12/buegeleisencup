@@ -350,6 +350,133 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
   .rk-av { width:40px; height:40px; }
   .rk-sum-v { font-size:.92rem; }
 }
+
+/* ══════════ Vorrunde auf 2 Bahnen + K.-o.-Runde ══════════ */
+.phase-bar { display:flex; gap:6px; background:#e2e8f0; padding:4px; border-radius:12px; margin-bottom:16px; }
+.phase-btn { flex:1; font-family:inherit; font-size:.86rem; font-weight:700; padding:9px 8px; border:0; border-radius:9px; background:transparent; color:#475569; cursor:pointer; }
+.phase-btn.active { background:#fff; color:#0f172a; box-shadow:0 1px 3px rgba(15,23,42,.15); }
+.phase-btn small { display:block; font-weight:500; font-size:.66rem; color:#64748b; margin-top:1px; }
+.vr-tools { display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:10px 14px; margin-bottom:14px; font-size:.78rem; color:#1e3a5f; line-height:1.55; }
+.vr-tools > div { flex:1; min-width:220px; }
+.vr-tools.warn { background:#fffbeb; border-color:#fde68a; color:#78350f; }
+.tool-btn { font-family:inherit; font-size:.78rem; font-weight:700; padding:9px 14px; border-radius:10px; border:1px solid #2563eb; background:#2563eb; color:#fff; cursor:pointer; white-space:nowrap; }
+.tool-btn.ghost { background:#fff; color:#2563eb; }
+.tool-btn.danger { background:#fff; color:#dc2626; border-color:#fca5a5; }
+.tool-btn:disabled { opacity:.4; cursor:not-allowed; }
+.heat-head { display:flex; align-items:baseline; gap:8px; margin:12px 2px 0; font-size:.72rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#334155; }
+.heat-head:first-child { margin-top:0; }
+.heat-head span { font-weight:600; letter-spacing:0; text-transform:none; color:#94a3b8; }
+.lane-tag { display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; color:#334155; background:#f1f5f9; border:1px solid #e2e8f0; padding:1px 8px; border-radius:20px; margin:3px 0 0 4px; }
+.lane-tag i { width:9px; height:9px; border-radius:50%; display:inline-block; border:1px solid rgba(0,0,0,.2); }
+
+.ko-setup { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px; color:#1e293b; }
+.ko-setup h3 { font-size:1rem; font-weight:700; color:#0f172a; }
+.ko-setup p { font-size:.8rem; color:#64748b; margin-top:6px; line-height:1.6; }
+.ko-sizes { display:flex; gap:6px; flex-wrap:wrap; margin:12px 0 4px; }
+.ko-size { font-family:inherit; font-weight:700; font-size:.85rem; padding:9px 16px; border-radius:10px; border:1.5px solid #cbd5e1; background:#fff; color:#334155; cursor:pointer; }
+.ko-size.sel { border-color:#2563eb; background:#eff6ff; color:#1d4ed8; }
+.ko-prev { margin:12px 0 14px; display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; font-size:.8rem; color:#334155; }
+.ko-prev div { display:flex; gap:6px; padding:5px 0; border-bottom:1px dashed #e2e8f0; min-width:0; }
+.ko-prev b { color:#94a3b8; font-weight:700; flex-shrink:0; }
+.ko-prev span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ko-bar { display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:10px 14px; font-size:.78rem; color:#475569; line-height:1.55; }
+.ko-bar > div { flex:1; min-width:220px; }
+.ko-bar b { color:#0f172a; }
+.ko-round { margin-top:14px; }
+.ko-round > summary { cursor:pointer; list-style:none; display:flex; align-items:center; gap:10px; font-size:.8rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#0f172a; padding:8px 2px; }
+.ko-round > summary::-webkit-details-marker { display:none; }
+.ko-round > summary::before { content:'▸'; color:#94a3b8; }
+.ko-round[open] > summary::before { content:'▾'; }
+.ko-prog { font-size:.68rem; font-weight:700; letter-spacing:0; text-transform:none; color:#64748b; background:#e2e8f0; padding:2px 9px; border-radius:20px; }
+.ko-prog.done { background:#dcfce7; color:#166534; }
+.ko-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ko-m { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:10px 12px; min-width:0; }
+.ko-m.wait { opacity:.55; }
+.ko-m-head { display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:.66rem; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:#64748b; margin-bottom:4px; }
+.ko-st { text-transform:none; letter-spacing:0; font-weight:700; text-align:right; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ko-st.win { color:#15803d; } .ko-st.tie { color:#b45309; }
+.ko-side { display:grid; grid-template-columns:14px 20px 30px 1fr 88px; align-items:center; gap:8px; padding:6px 0; }
+.ko-side + .ko-side { border-top:1px dashed #e2e8f0; }
+.ko-dot { width:14px; height:14px; border-radius:50%; border:1px solid rgba(0,0,0,.2); }
+.ko-seed { font-size:.68rem; font-weight:700; color:#94a3b8; text-align:center; }
+.ko-av { width:30px; height:30px; display:flex; align-items:center; justify-content:center; }
+.ko-nm { font-size:.86rem; font-weight:600; color:#0f172a; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ko-nm.tbd { color:#94a3b8; font-weight:500; font-style:italic; }
+.ko-side.win .ko-nm { font-weight:800; } .ko-side.win .ko-nm::after { content:' ✓'; color:#16a34a; }
+.ko-side.lose .ko-nm { color:#94a3b8; }
+.ko-side .dist-inp { padding:7px 6px; font-size:.9rem; }
+.ko-side .dist-inp::placeholder { color:#cbd5e1; }
+@media (max-width:640px){ .ko-grid, .ko-prev { grid-template-columns:1fr; } }
+
+/* Ergebnisseite: Jetzt auf dem Eis */
+.now { max-width:1100px; margin:18px auto 0; padding:0 20px; }
+.now:empty { display:none; }
+.now-head { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+.now-title { font-size:.7rem; font-weight:800; letter-spacing:1.8px; text-transform:uppercase; color:#ff8f8f; }
+.now-sub { font-size:.76rem; color:#b8c6da; font-weight:600; }
+.now-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.now-lane { position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.12); padding:14px 14px 10px; color:#0f2540; min-width:0;
+  background:linear-gradient(180deg,#eef6fc 0%,#d6e7f3 60%,#c4dbec 100%); box-shadow:0 14px 34px -18px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.9); }
+.now-lane::before { content:''; position:absolute; left:0; right:0; top:0; height:5px; background:linear-gradient(90deg,#1d4ed8,#3b82f6,#1d4ed8); opacity:.75; }
+.now-lane-h { display:flex; justify-content:space-between; gap:8px; font-size:.62rem; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:#46627f; margin-bottom:4px; }
+.now-lane-h span:last-child { color:#7c93ab; text-align:right; }
+.now-t { display:grid; grid-template-columns:84px 1fr auto; align-items:center; gap:10px; padding:3px 0; }
+.now-t svg { width:84px; height:42px; display:block; overflow:visible; }
+.now-nm { font-size:.9rem; font-weight:700; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.now-nm small { display:block; font-size:.64rem; font-weight:600; color:#5b7894; overflow:hidden; text-overflow:ellipsis; }
+.now-v { font-family:'JetBrains Mono',monospace; font-size:.8rem; font-weight:700; background:rgba(255,255,255,.75); border:1px solid rgba(15,40,70,.1); padding:2px 8px; border-radius:7px; white-space:nowrap; }
+.now-v.ln-empty { color:#7c93ab; font-weight:500; }
+.now-t.win .now-v { background:#16a34a; border-color:#15803d; color:#fff; }
+.now-t.lose { opacity:.6; }
+.now-vs { font-size:.56rem; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:#7c93ab; padding-left:22px; }
+.now-next { margin-top:9px; font-size:.74rem; color:var(--dim); line-height:1.5; }
+.now-next b { color:#b8c6da; font-weight:600; }
+.now-done { border-radius:16px; padding:14px 16px; font-size:.84rem; font-weight:600; color:#bbf7d0; background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.3); }
+.champ { border-radius:20px; padding:22px 16px; text-align:center; border:1px solid rgba(251,191,36,.4); background:linear-gradient(180deg,rgba(251,191,36,.16),rgba(251,191,36,.04)); }
+.champ-k { font-size:.68rem; letter-spacing:2px; text-transform:uppercase; font-weight:800; color:#fbbf24; }
+.champ-n { font-size:1.7rem; font-weight:800; color:#fff; margin-top:4px; line-height:1.2; }
+.champ-pod { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:12px; font-size:.8rem; color:#dbe6f5; }
+.champ-pod span { background:rgba(255,255,255,.06); border:1px solid var(--line); padding:4px 11px; border-radius:99px; }
+
+/* Ergebnisseite: Turnierbaum */
+.kb { max-width:1100px; margin:22px auto 0; padding:0 20px; }
+.kb:empty { display:none; }
+.kb-rounds { display:flex; flex-direction:column; gap:16px; }
+.kb-round { min-width:0; }
+.kb-round-h { font-size:.8rem; font-weight:800; color:#fff; margin-bottom:8px; display:flex; gap:8px; align-items:baseline; }
+.kb-round-h span { font-size:.64rem; color:var(--dim); font-weight:700; }
+.kb-round-h span.live { color:#ff8f8f; }
+.kb-ms { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:8px; }
+.kb-m { border-radius:14px; border:1px solid var(--line); background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025)); overflow:hidden; min-width:0; }
+.kb-m.live { border-color:rgba(255,107,107,.55); box-shadow:0 0 0 1px rgba(255,107,107,.18); }
+.kb-m-h { display:flex; justify-content:space-between; gap:6px; font-size:.56rem; letter-spacing:1.1px; text-transform:uppercase; font-weight:700; color:var(--dim); padding:6px 10px 3px; }
+.kb-m.live .kb-m-h span:last-child { color:#ff8f8f; }
+.kb-s { display:grid; grid-template-columns:18px 26px 1fr auto; gap:8px; align-items:center; padding:5px 10px; border-top:1px solid var(--line); }
+.kb-seed { font-size:.62rem; color:var(--dim); font-weight:700; text-align:center; }
+.kb-av { width:26px; height:26px; border-radius:7px; overflow:hidden; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.08); }
+.kb-nm { font-size:.8rem; font-weight:600; color:#dbe6f5; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.kb-nm.tbd { color:var(--dim); font-weight:500; font-style:italic; }
+.kb-v { font-family:'JetBrains Mono',monospace; font-size:.72rem; color:#b8c6da; white-space:nowrap; }
+.kb-s.win { background:rgba(34,197,94,.12); } .kb-s.win .kb-nm { color:#fff; font-weight:800; } .kb-s.win .kb-v { color:#86efac; font-weight:700; }
+.kb-s.lose .kb-nm, .kb-s.lose .kb-v { color:#64748b; }
+@media (min-width:900px){
+  .kb-rounds { flex-direction:row; align-items:stretch; gap:12px; }
+  .kb-round { flex:1; order:0 !important; display:flex; flex-direction:column; }
+  .kb-ms { display:flex; flex-direction:column; justify-content:space-around; flex:1; }
+}
+.rk-cut { display:flex; align-items:center; gap:10px; font-size:.62rem; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; color:#fbbf24; padding:3px 4px; text-align:center; }
+.rk-cut::before, .rk-cut::after { content:''; flex:1; height:0; border-top:1.5px dashed rgba(251,191,36,.5); }
+.rk-row.out { opacity:.7; }
+.rk-run.alive { color:#86efac; border-color:rgba(34,197,94,.35); background:rgba(34,197,94,.1); font-family:'Poppins',sans-serif; font-weight:600; }
+.rk-run.gold { color:#fcd34d; border-color:rgba(251,191,36,.4); background:rgba(251,191,36,.1); font-family:'Poppins',sans-serif; font-weight:700; }
+.rk-run.stage { font-family:'Poppins',sans-serif; }
+@media (max-width:640px){
+  .now, .kb { padding:0 10px; }
+  .now-grid { grid-template-columns:1fr; }
+  .now-t { grid-template-columns:72px 1fr auto; gap:8px; }
+  .now-t svg { width:72px; height:36px; }
+  .champ-n { font-size:1.35rem; }
+}
 </style>
 </head>
 <body class="admin-mode">
@@ -368,12 +495,17 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 <div id="adminPage" class="page active">
   <div class="admin-wrap">
     <div class="section-title">Messung</div>
-    <div class="section-sub">Bügeleisencup 2026 · RC Riesa-Elbland · Abstand zur Markierung (cm) für Lauf 1 &amp; 2 eintragen</div>
+    <div class="section-sub">Bügeleisencup 2026 · RC Riesa-Elbland · Vorrunde: 2 Läufe auf 2 Bahnen, Abstand zur Markierung in cm · danach K.-o.-Runde bis zum Finale</div>
+    <div class="phase-bar" id="phaseBar"></div>
+    <div id="vrPanel">
+    <div id="vrTools"></div>
     <div class="team-list" id="teamList"></div>
     <button class="add-btn" onclick="openModal()">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       Mannschaft hinzufügen
     </button>
+    </div>
+    <div id="koPanel" style="display:none"></div>
     <div id="qrBlock" style="margin-top:40px"></div>
   </div>
 </div>
@@ -393,8 +525,8 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
     </div>
     <div class="rs-stats">
       <div class="rs-stat"><div class="rs-stat-l">Teams</div><div class="rs-stat-v" id="statTeams">0</div></div>
-      <div class="rs-stat"><div class="rs-stat-l">Führend</div><div class="rs-stat-v rs-ellip" id="statLeader">—</div></div>
-      <div class="rs-stat"><div class="rs-stat-l">Bestwert Σ</div><div class="rs-stat-v rs-gold" id="statBest">—</div></div>
+      <div class="rs-stat"><div class="rs-stat-l" id="statLeaderL">Führend</div><div class="rs-stat-v rs-ellip" id="statLeader">—</div></div>
+      <div class="rs-stat"><div class="rs-stat-l" id="statBestL">Bestwert Σ</div><div class="rs-stat-v rs-gold" id="statBest">—</div></div>
     </div>
     <div class="rs-actions">
       <button class="rs-btn" onclick="downloadStartaufstellung()">🚦 Startaufstellung</button>
@@ -403,7 +535,9 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
     </div>
   </header>
 
-  <section class="rink">
+  <section class="now" id="nowBox"></section>
+
+  <section class="rink" id="rinkBox">
     <div class="rink-legend"><span>Start</span><span>näher = besser →</span></div>
     <div class="goal">
       <div class="goal-puck"><div class="goal-puck-top"></div></div>
@@ -413,8 +547,10 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
     <div class="rink-lanes" id="trackLanes"></div>
   </section>
 
+  <section class="kb" id="koBox"></section>
+
   <section class="rk">
-    <div class="rk-title">Rangliste</div>
+    <div class="rk-title" id="rkTitle">Rangliste</div>
     <div id="rankList"></div>
   </section>
 </div>
@@ -519,6 +655,7 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 </div>
 
 <script>
+let koSize=null, ko=null;   // K.-o.-Runde: gewählte Teilnehmerzahl + laufender Turnierbaum
 let teams=[], nextId=1, selEmoji='🎯', selColor='#3b82f6', photoDataUrl=null, emblMode='emoji';
 const photoCache = {};
 function photoCacheSet(id, dataUrl){ if(dataUrl) photoCache[String(id)] = dataUrl; }
@@ -600,12 +737,23 @@ async function deleteLogo(id){
   if(!syncReady()) return;
   try{ await fetch(logoPath(syncConfig().dbUrl,id),{method:'DELETE'}); }catch(e){}
 }
+// Vergleichbare Form des Spielstands (Firebase lässt leere Werte weg und sortiert Schlüssel)
+function canon(v){
+  const n=x=>{
+    if(x===null||x===undefined) return undefined;
+    if(Array.isArray(x)){ const a=x.map(n).map(y=>y===undefined?null:y); return a.length?a:undefined; }
+    if(typeof x==='object'){ const o={}; Object.keys(x).sort().forEach(k=>{ const y=n(x[k]); if(y!==undefined) o[k]=y; }); return Object.keys(o).length?o:undefined; }
+    return x;
+  };
+  return JSON.stringify(n(v)||null);
+}
+function statePayload(){ return { teams:teamsForSync(), nextId, koSize:koSize||null, ko:ko||null }; }
 async function syncPush(){
   if(!syncReady()) return;
   const c=syncConfig();
   try{
-    const payload={ teams:teamsForSync(), nextId };
-    lastSyncHash=JSON.stringify(payload);
+    const payload=statePayload();
+    lastSyncHash=canon(payload);
     const r=await fetch(statePath(c.dbUrl),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(!r.ok) throw new Error('HTTP '+r.status);
     setStatus('connected');
@@ -655,13 +803,14 @@ function applyRemoteData(data){
   if(!rawTeams.length) return;
   const safeTeams=rawTeams.map(t=>{ if(!t||typeof t!=='object') return null; const {photo,...rest}=t; return rest; }).filter(Boolean);
   const safe={...data, teams:safeTeams};
-  const hash=JSON.stringify(safe);
+  const hash=canon({teams:safeTeams,nextId:data.nextId,koSize:data.koSize,ko:data.ko});
   if(hash===lastSyncHash) return;
   lastSyncHash=hash;
   // Admin behält eigene Logos; alle anderen übernehmen den entfernten Stand
   const ownLogos={}; teams.forEach(t=>{ if(t.photo) ownLogos[t.id]={photo:t.photo,logoV:t.logoV}; });
   teams=safe.teams;
   nextId=safe.nextId || Math.max(0,...safe.teams.map(t=>t.id||0))+1;
+  koSize=safe.koSize||null; ko=normKo(safe.ko);
   loadPhotosFromLocal();
   if(!isResultsView){
     teams.forEach(t=>{ const o=ownLogos[t.id]; if(o && (!t.logoV || t.logoV===o.logoV)){ t.photo=o.photo; t.logoV=o.logoV||t.logoV; } });
@@ -684,7 +833,7 @@ function syncStart(){
 let _saveDebounce=null;
 function save(){
   // Spielstand ohne Bilder lokal speichern; Logos separat
-  const data={ teams:teams.map(t=>{ const {photo,photoThumb,...rest}=t; return rest; }), nextId };
+  const data={ teams:teams.map(t=>{ const {photo,photoThumb,...rest}=t; return rest; }), nextId, koSize, ko };
   try{ localStorage.setItem('iron26', JSON.stringify(data)); }catch(e){}
   savePhotosLocally();
   if(syncReady()) syncPush();
@@ -710,7 +859,7 @@ async function migrateLogos(){
 function load(){
   try{
     const d=JSON.parse(localStorage.getItem('iron26')||'null');
-    if(d && d.teams){ teams=d.teams.map(t=>{ const {photoThumb,...r}=t; return r; }); nextId=d.nextId||1; }
+    if(d && d.teams){ teams=d.teams.map(t=>{ const {photoThumb,...r}=t; return r; }); nextId=d.nextId||1; koSize=d.koSize||null; ko=normKo(d.ko); }
   }catch(e){}
   loadPhotosFromLocal();
   if(!teams.length){
@@ -827,13 +976,250 @@ function playColor(t){
   return t.c1||t.color;
 }
 
-// ── ADMIN ──
+// ══════════════ TURNIERMODUS: VORRUNDE AUF 2 BAHNEN + K.-O.-RUNDE ══════════════
+// Vorrunde: je 4 Teams gleichzeitig (Bahn A: Rot gegen Gelb, Bahn B: Blau gegen Grün), 2 Läufe, Summe zählt.
+// K.-o.: die besten koSize Teams, 1. gegen Letzten usw.; Verlierer scheiden aus bis zum Finale.
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const teamById=id=>teams.find(t=>t.id===id)||null;
+const laneOf=i=>(i%4<2?'A':'B');
+const LANE_COLORS={A:[PLAY_COLORS[0],PLAY_COLORS[1]],B:[PLAY_COLORS[2],PLAY_COLORS[3]]};
+const ROUND_NAMES={1:'Finale',2:'Halbfinale',4:'Viertelfinale',8:'Achtelfinale',16:'Sechzehntelfinale'};
+const ROUND_SHORT={1:'Finale',2:'HF',4:'VF',8:'AF',16:'1/16'};
+const roundName=n=>ROUND_NAMES[n]||('Runde der letzten '+n*2);
+function normKo(k){
+  if(!k||!k.seeds) return null;
+  const seeds=(Array.isArray(k.seeds)?k.seeds:Object.values(k.seeds)).map(Number);
+  return { size:k.size||seeds.length, seeds, res:(k.res&&typeof k.res==='object')?k.res:{} };
+}
+// Setzliste: 1 gegen n, 2 gegen n-1 …; 1 und 2 können sich erst im Finale treffen
+function bracketOrder(n){ let o=[1,2]; while(o.length<n){ const m=o.length*2+1; o=o.flatMap(s=>[s,m-s]); } return o; }
+function koDefaultSize(){ const n=teams.length; if(n<2) return 0; let s=2; while(s*2<=n/2) s*=2; return s; }
+function koSizeOptions(){ return [2,4,8,16,32].filter(s=>s<=teams.length); }
+function koSizeEff(){ if(ko) return ko.size; return (koSize && koSizeOptions().includes(koSize)) ? koSize : koDefaultSize(); }
+function koQualified(){ return ranked().filter(t=>sum(t)!==null); }
+
+function koMatch(key,a,b,i,r,n){
+  const s=(ko.res&&ko.res[key])||null;
+  const ready=a!=null&&b!=null;
+  const ok=!!(s&&ready&&s.a===a&&s.b===b);
+  const da=ok?pt(s.da):null, db=ok?pt(s.db):null;
+  let w=null,l=null,tie=false;
+  if(da!==null&&db!==null){ if(da<db){w=a;l=b;} else if(db<da){w=b;l=a;} else tie=true; }
+  return {key,r,i,n,a:a==null?null:a,b:b==null?null:b,sa:ok?(s.da||''):'',sb:ok?(s.db||''):'',da,db,w,l,tie,ready,lane:i%2?'B':'A',pa:'',pb:''};
+}
+function koRounds(){
+  if(!ko) return null;
+  const ord=bracketOrder(ko.size);
+  let cur=[]; for(let i=0;i<ko.size;i+=2) cur.push([ko.seeds[ord[i]-1], ko.seeds[ord[i+1]-1]]);
+  const rounds=[]; let r=0, prevShort='';
+  for(;;){
+    const n=cur.length;
+    const ms=cur.map((p,i)=>{ const m=koMatch('r'+r+'m'+i,p[0],p[1],i,r,n); if(r>0){ m.pa='Sieger '+prevShort+' '+(2*i+1); m.pb='Sieger '+prevShort+' '+(2*i+2); } return m; });
+    rounds.push({r,n,name:roundName(n),short:ROUND_SHORT[n]||('R'+n*2),matches:ms});
+    if(n===1) break;
+    prevShort=ROUND_SHORT[n]||('R'+n*2);
+    const next=[]; for(let i=0;i<n;i+=2) next.push([ms[i].w, ms[i+1].w]);
+    cur=next; r++;
+  }
+  let p3=null;
+  if(rounds.length>=2){ const sf=rounds[rounds.length-2].matches; p3=koMatch('p3',sf[0].l,sf[1].l,1,rounds.length-1,1); p3.pa='Verlierer HF 1'; p3.pb='Verlierer HF 2'; p3.isP3=true; }
+  return {rounds,p3,final:rounds[rounds.length-1].matches[0]};
+}
+function koAllMatches(K){ const a=[]; K.rounds.forEach(R=>R.matches.forEach(m=>a.push(m))); if(K.p3) a.push(K.p3); return a; }
+function koCurrentRound(K){ return K.rounds.find(R=>R.matches.some(m=>m.w==null))||null; }
+function koAlive(K){ let out=0; K.rounds.forEach(R=>R.matches.forEach(m=>{ if(m.w!=null) out++; })); return ko.size-out; }
+// Die Spiele, die gerade auf den beiden Bahnen laufen
+function koNowPair(K){
+  const cur=koCurrentRound(K); if(!cur) return {cur:null,pair:[],next:[]};
+  if(cur.n===1){ const pair=[K.final]; if(K.p3&&K.p3.ready) pair.push(K.p3); return {cur,pair,next:[]}; }
+  const i=cur.matches.findIndex(m=>m.w==null), b=i-i%2;
+  return {cur,pair:cur.matches.slice(b,b+2),next:cur.matches.slice(b+2,b+4)};
+}
+function koMatchLabel(m,K){ if(m.isP3) return 'Spiel um Platz 3'; if(m.n===1) return 'Finale'; return K.rounds[m.r].name+' · Spiel '+(m.i+1); }
+function koStart(){
+  const size=koSizeEff(), q=koQualified();
+  if(!size||q.length<size){ alert('Für die K.-o.-Runde brauchen mindestens '+size+' Teams beide Läufe der Vorrunde.'); return; }
+  const open=teams.length-q.length;
+  if(!confirm('K.-o.-Runde mit den besten '+size+' Teams starten?'+(open?'\n\nAchtung: '+open+' Team(s) haben noch keine vollständige Vorrunde und sind dann nicht dabei.':''))) return;
+  ko={size,seeds:q.slice(0,size).map(t=>t.id),res:{}};
+  _koOpen={}; save(); renderAdmin();
+}
+function koReset(){
+  if(!confirm('K.-o.-Runde wirklich zurücksetzen?\nAlle K.-o.-Ergebnisse werden gelöscht, die Vorrunde bleibt erhalten.')) return;
+  ko=null; _koOpen={}; save(); renderAdmin();
+}
+function koSetSize(s){ koSize=s; save(); renderAdmin(); }
+// Endstand: Sieger, Finalist, Platz 3/4, danach Verlierer je Runde nach Vorrundenplatz, dann die Vorrunde
+function koStandings(final){
+  const vr=ranked(), vrRank=new Map(vr.map((t,i)=>[t.id,i+1]));
+  if(!ko) return vr.map((t,i)=>({t,platz:i+1,range:'',stage:'',alive:false,vr:i+1,seed:null}));
+  const K=koRounds(), R=K.rounds, last=R.length-1, seedOf=new Map(ko.seeds.map((id,i)=>[id,i+1]));
+  const rows=[], seen=new Set();
+  const bySeed=(x,y)=>(seedOf.get(x)||999)-(seedOf.get(y)||999);
+  const add=(id,platz,stage,alive,range)=>{ const t=teamById(id); if(!t||seen.has(id)) return; seen.add(id); rows.push({t,platz,range:range||'',stage,alive,vr:vrRank.get(id)||null,seed:seedOf.get(id)||null}); };
+  const fin=K.final, finDone=fin.w!=null;
+  if(finDone){ add(fin.w,1,'Cupsieger',false); add(fin.l,2,'Finale',false); }
+  else [fin.a,fin.b].filter(x=>x!=null).sort(bySeed).forEach(id=>add(id,null,'Finale',true));
+  if(K.p3){
+    const p=K.p3;
+    if(p.w!=null){ add(p.w,3,'Halbfinale',false); add(p.l,4,'Halbfinale',false); }
+    else [p.a,p.b].filter(x=>x!=null).sort(bySeed).forEach(id=>{ if(final||finDone) add(id,3,'Halbfinale',false); else add(id,null,'Spiel um Platz 3',true,'3–4'); });
+  }
+  for(let r=last-1;r>=0;r--){
+    const ms=R[r].matches, n=ms.length, allDone=ms.every(m=>m.w!=null);
+    const live=[]; ms.forEach(m=>{ if(m.w==null) [m.a,m.b].forEach(id=>{ if(id!=null) live.push(id); }); });
+    live.sort(bySeed).forEach(id=>add(id,null,R[r].name,true));
+    if(r===last-1) continue;   // Halbfinal-Verlierer stehen im Spiel um Platz 3
+    const losers=ms.filter(m=>m.l!=null).map(m=>m.l).sort(bySeed);
+    losers.forEach((id,i)=>add(id,allDone?n+1+i:null,R[r].name,false,(n+1)+'–'+(2*n)));
+  }
+  let p=ko.size;
+  vr.forEach(t=>{ if(!seen.has(t.id)){ p++; add(t.id,p,'Vorrunde',false); } });
+  return rows;
+}
+// Vorrunde: welche Vierergruppe ist gerade dran?
+function vrHeat(){
+  if(!teams.length) return null;
+  const has=(t,k)=>pt(t[k])!==null;
+  const anyR2=teams.some(t=>has(t,'run2')), allR1=teams.every(t=>has(t,'run1'));
+  if(allR1&&teams.every(t=>has(t,'run2'))) return {done:true};
+  const seq=allR1||!anyR2;   // erst alle Lauf 1, dann alle Lauf 2
+  const need=allR1?(t=>!has(t,'run2')):(!anyR2?(t=>!has(t,'run1')):(t=>!has(t,'run1')||!has(t,'run2')));
+  const total=Math.ceil(teams.length/4);
+  for(let g=0;g<total;g++){
+    const grp=teams.slice(g*4,g*4+4);
+    if(grp.some(need)){
+      const run=allR1?'run2':(!anyR2?'run1':(grp.every(t=>has(t,'run1'))?'run2':'run1'));
+      let next=teams.slice(g*4+4,g*4+8);
+      if(!next.length&&seq&&run==='run1') next=teams.slice(0,4);
+      return {run,g,total,grp,next};
+    }
+  }
+  return {done:true};
+}
+function setLaneColors(){
+  if(!teams.length) return;
+  if(!confirm('Spielfarben für alle Teams nach Bahn setzen?\n\nBahn A: Rot gegen Gelb · Bahn B: Blau gegen Grün\nGilt für Lauf 1 und Lauf 2 und überschreibt die bisherige Auswahl.')) return;
+  teams.forEach((t,i)=>{ const c=PLAY_COLORS[i%4].h; t.c1=c; t.c2=c; });
+  save(); renderAdmin();
+}
+
+// ── ADMIN: Phasen ──
+let adminPhase='vr', _koOpen={}, _koHtml={};
+try{ adminPhase=localStorage.getItem('iron26_phase')==='ko'?'ko':'vr'; }catch(e){}
+function setPhase(p){ adminPhase=p; try{ localStorage.setItem('iron26_phase',p); }catch(e){} renderAdmin(); }
 function renderAdmin(){
+  const done=teams.filter(t=>sum(t)!==null).length;
+  let koSub='noch nicht gestartet';
+  if(ko){ const K=koRounds(), c=koCurrentRound(K); koSub=c?c.name:'beendet'; }
+  document.getElementById('phaseBar').innerHTML=
+    `<button class="phase-btn${adminPhase==='vr'?' active':''}" onclick="setPhase('vr')">Vorrunde<small>${done} von ${teams.length} Teams fertig</small></button>`+
+    `<button class="phase-btn${adminPhase==='ko'?' active':''}" onclick="setPhase('ko')">K.-o.-Runde<small>${koSub}</small></button>`;
+  document.getElementById('vrPanel').style.display=adminPhase==='vr'?'':'none';
+  document.getElementById('koPanel').style.display=adminPhase==='ko'?'':'none';
+  if(adminPhase==='ko'){ renderKoAdmin(); return; }
+  document.getElementById('vrTools').innerHTML = ko
+    ? `<div class="vr-tools warn"><div>Die K.-o.-Runde läuft bereits. Änderungen an der Vorrunde ändern die Setzliste nicht mehr.</div></div>`
+    : `<div class="vr-tools"><div>Je <b>4 Teams</b> spielen gleichzeitig: <b>Bahn A</b> Rot gegen Gelb, <b>Bahn B</b> Blau gegen Grün. Die Reihenfolge der Liste ist der Spielplan – Teams zum Umsortieren ziehen.</div><button class="tool-btn ghost" onclick="setLaneColors()">Farben nach Bahn setzen</button></div>`;
+  renderTeamList();
+}
+function koStatusHTML(m){
+  if(!m.ready) return ['','wartet'];
+  if(m.w!=null) return ['win','Sieger: '+esc((teamById(m.w)||{}).name||'')];
+  if(m.tie) return ['tie','Gleichstand – Stechen'];
+  return ['',''];
+}
+function koCardHTML(m){
+  const cols=LANE_COLORS[m.lane], seedOf=id=>{ const i=ko.seeds.indexOf(id); return i<0?'':i+1; };
+  const [stCls,stTxt]=koStatusHTML(m);
+  const side=(id,s,val,ph,c)=>{
+    const t=id!=null?teamById(id):null, cls=m.w!=null?(m.w===id?' win':' lose'):'';
+    return `<div class="ko-side${cls}" id="kos-${m.key}-${s}">
+      <span class="ko-dot" style="background:${c.h}" title="${c.n}"></span>
+      <span class="ko-seed">${t?seedOf(id):''}</span>
+      <span class="ko-av">${t?emblInner(t,30,7):''}</span>
+      <span class="ko-nm${t?'':' tbd'}">${t?esc(t.name):ph}</span>
+      <input class="dist-inp" type="text" inputmode="decimal" placeholder="cm" value="${esc(val)}" ${m.ready?'':'disabled'} oninput="koUpd('${m.key}','d${s}',this.value)">
+    </div>`;
+  };
+  const title=m.isP3?'Spiel um Platz 3':(m.n===1?'Finale':'Spiel '+(m.i+1));
+  return `<div class="ko-m${m.ready?'':' wait'}" id="kom-${m.key}">
+    <div class="ko-m-head"><span>${title} · Bahn ${m.lane}</span><span class="ko-st ${stCls}" id="kost-${m.key}">${stTxt}</span></div>
+    ${side(m.a,'a',m.sa,m.pa,cols[0])}${side(m.b,'b',m.sb,m.pb,cols[1])}
+  </div>`;
+}
+function koProgHTML(R,K){
+  const ms=R.n===1&&K.p3?[...R.matches]:R.matches, d=ms.filter(m=>m.w!=null).length;
+  return `<span class="ko-prog${d===ms.length?' done':''}" id="kop-${R.r}">${d===ms.length?'✓ beendet':d+' von '+ms.length+' Spielen'}</span>`;
+}
+function renderKoAdmin(){
+  const box=document.getElementById('koPanel');
+  if(!ko){
+    const size=koSizeEff(), q=koQualified(), opts=koSizeOptions();
+    if(teams.length<2){ box.innerHTML=`<div class="ko-setup"><h3>K.-o.-Runde</h3><p>Dafür werden mindestens 2 Mannschaften gebraucht.</p></div>`; return; }
+    const enough=q.length>=size;
+    let prev='';
+    if(enough){
+      const ord=bracketOrder(size), rows=[];
+      for(let i=0;i<size;i+=2){ const a=q[ord[i]-1], b=q[ord[i+1]-1]; rows.push(`<div><b>${ord[i]}.</b><span>${esc(a.name)}</span><b>– ${ord[i+1]}.</b><span>${esc(b.name)}</span></div>`); }
+      prev=`<p><b style="color:#0f172a">${roundName(size/2)} nach aktuellem Stand</b></p><div class="ko-prev">${rows.join('')}</div>`;
+    }
+    box.innerHTML=`<div class="ko-setup">
+      <h3>K.-o.-Runde starten</h3>
+      <p>${q.length} von ${teams.length} Teams haben beide Läufe der Vorrunde. Die besten Teams ziehen ein: der Erste spielt gegen den Letzten der Qualifizierten, der Zweite gegen den Vorletzten usw. Verlierer scheiden aus.</p>
+      <div class="ko-sizes">${opts.map(s=>`<button class="ko-size${s===size?' sel':''}" onclick="koSetSize(${s})">Top ${s}</button>`).join('')}</div>
+      <p>${teams.length-size>0?(teams.length-size)+' Teams scheiden nach der Vorrunde aus. ':''}${enough?'':'Es fehlen noch Ergebnisse: erst '+q.length+' Teams haben beide Läufe.'}</p>
+      ${prev}
+      <button class="tool-btn" style="margin-top:6px" onclick="koStart()" ${enough?'':'disabled'}>K.-o.-Runde mit Top ${size} starten</button>
+    </div>`;
+    return;
+  }
+  const K=koRounds(); _koHtml={};
+  const sections=K.rounds.map(R=>{
+    const ms=[...R.matches]; if(R.n===1&&K.p3) ms.push(K.p3);
+    const done=R.matches.every(m=>m.w!=null), open=(R.r in _koOpen)?_koOpen[R.r]:!done;
+    return `<details class="ko-round" ${open?'open':''} ontoggle="_koOpen[${R.r}]=this.open">
+      <summary>${R.name}${koProgHTML(R,K)}</summary>
+      <div class="ko-grid">${ms.map(m=>{ const h=koCardHTML(m); _koHtml[m.key]=h; return h; }).join('')}</div>
+    </details>`;
+  }).join('');
+  box.innerHTML=`<div class="ko-bar"><div><b>K.-o.-Runde · Top ${ko.size}</b><br>Abstand des besten Bügeleisens je Team in cm eintragen – der kleinere Wert gewinnt. Bahn A: Rot gegen Gelb, Bahn B: Blau gegen Grün.</div><button class="tool-btn danger" onclick="koReset()">Zurücksetzen</button></div>${sections}`;
+}
+function koUpd(key,field,val){
+  if(!ko) return;
+  const m=koAllMatches(koRounds()).find(x=>x.key===key); if(!m||!m.ready) return;
+  if(!ko.res) ko.res={};
+  let s=ko.res[key]; if(!s||s.a!==m.a||s.b!==m.b) s=ko.res[key]={a:m.a,b:m.b,da:'',db:''};
+  s[field]=val;
+  koPatch(key);
+  clearTimeout(_saveDebounce); _saveDebounce=setTimeout(()=>save(),600);
+}
+// Nach einer Eingabe nur das aktualisieren, was sich geändert hat – das Eingabefeld bleibt fokussiert
+function koPatch(focusKey){
+  const K=koRounds();
+  koAllMatches(K).forEach(m=>{
+    const el=document.getElementById('kom-'+m.key); if(!el) return;
+    const h=koCardHTML(m);
+    if(m.key===focusKey){
+      const [c,tx]=koStatusHTML(m), st=document.getElementById('kost-'+m.key);
+      if(st){ st.className='ko-st '+c; st.innerHTML=tx; }
+      [['a',m.a],['b',m.b]].forEach(([s,id])=>{ const e=document.getElementById('kos-'+m.key+'-'+s); if(e) e.className='ko-side'+(m.w!=null?(m.w===id?' win':' lose'):''); });
+    } else if(_koHtml[m.key]!==h){ el.outerHTML=h; }
+    _koHtml[m.key]=h;
+  });
+  K.rounds.forEach(R=>{ const e=document.getElementById('kop-'+R.r); if(e) e.outerHTML=koProgHTML(R,K); });
+  const bar=document.querySelectorAll('#phaseBar .phase-btn small')[1]; if(bar){ const c=koCurrentRound(K); bar.textContent=c?c.name:'beendet'; }
+}
+
+// ── ADMIN: Vorrunde ──
+function renderTeamList(){
   const list=document.getElementById('teamList');
   if(!teams.length){ list.innerHTML=`<div class="empty"><div class="empty-icon">🎯</div>Noch keine Mannschaften.<br>Füge die erste hinzu.</div>`; return; }
+  const nG=Math.ceil(teams.length/4);
   list.innerHTML=teams.map((t,idx)=>{
     const s=sum(t);
-    return `<div class="team-row" id="tr-${t.id}" draggable="true" data-id="${t.id}">
+    const head=idx%4===0?`<div class="heat-head">Gruppe ${idx/4+1}<span>von ${nG}</span></div>`:'';
+    return head+`<div class="team-row" id="tr-${t.id}" draggable="true" data-id="${t.id}">
       <div class="drag-handle" title="Ziehen zum Sortieren"><span></span><span></span><span></span></div>
       <div class="team-num">${idx+1}</div>
       <div class="avatar" onclick="triggerAv(${t.id})" title="Bild ändern">
@@ -843,7 +1229,7 @@ function renderAdmin(){
       </div>
       <div>
         <input class="team-name-inp" id="nm-${t.id}" value="${t.name}" onchange="renameTeam(${t.id},this.value)" title="Name bearbeiten">
-        <div class="team-badge" style="color:${t.color}">${t.photo?'📷 Foto':t.emoji+' Emoji'}</div>
+        <div class="team-badge" style="color:${t.color}">${t.photo?'📷 Foto':t.emoji+' Emoji'}</div><span class="lane-tag"><i style="background:${PLAY_COLORS[idx%4].h}"></i>Bahn ${laneOf(idx)}</span>
       </div>
       <div class="dist-block">
         <div class="dist-label">Lauf 1 (cm)</div>
@@ -915,7 +1301,9 @@ function upd(id,run,val){
   if(el){ el.textContent=s!==null?ft(s):'—'; el.className='sum-num'+(s!==null?'':' sum-empty'); }
   clearTimeout(_saveDebounce); _saveDebounce=setTimeout(()=>save(),600);
 }
-function delTeam(id){ if(!confirm('Mannschaft wirklich löschen?')) return; teams=teams.filter(x=>x.id!==id); save(); deleteLogo(id); renderAdmin(); }
+function delTeam(id){
+  if(ko&&ko.seeds.includes(id)){ alert('Dieses Team steht in der K.-o.-Runde. Bitte zuerst die K.-o.-Runde zurücksetzen.'); return; }
+  if(!confirm('Mannschaft wirklich löschen?')) return; teams=teams.filter(x=>x.id!==id); save(); deleteLogo(id); renderAdmin(); }
 
 let _dragId=null,_touchClone=null,_touchDragId=null;
 function initDragDrop(){
@@ -1010,33 +1398,128 @@ function addTeam(){
 
 function currentRunPhase(){
   if(!teams.length) return null;
+  if(ko){ const K=koRounds(), c=koCurrentRound(K); return c?{label:c.name,done:false,ko:true}:{label:'Finale entschieden',done:true,ko:true}; }
   const anyRun1=teams.some(t=>pt(t.run1)!==null), anyRun2=teams.some(t=>pt(t.run2)!==null), allRun1=teams.every(t=>pt(t.run1)!==null), allRun2=teams.every(t=>pt(t.run2)!==null);
-  if(allRun2) return {label:'Lauf 2/2', done:true};
-  if(anyRun2 || allRun1) return {label:'Lauf 2/2', done:false};
-  return {label:'Lauf 1/2', done:false};
+  if(allRun2) return {label:'Vorrunde beendet', done:true};
+  if(anyRun2 || allRun1) return {label:'Vorrunde · Lauf 2/2', done:false};
+  return {label:'Vorrunde · Lauf 1/2', done:false};
 }
 function updateRunChip(){
   const chip=document.getElementById('runChip'); if(!chip) return;
   const phase=currentRunPhase(); if(!phase){ chip.textContent=''; return; }
-  chip.textContent=(phase.done?'✓ ':'🏃 ')+phase.label;
+  chip.textContent=(phase.done?'✓ ':(phase.ko?'⚔️ ':'🏃 '))+phase.label;
   chip.style.background=phase.done?'rgba(16,185,129,.12)':'rgba(59,130,246,.12)';
   chip.style.borderColor=phase.done?'rgba(16,185,129,.4)':'rgba(59,130,246,.35)';
   chip.style.color=phase.done?'#6ee7b7':'#93c5fd';
 }
 
 // ── RESULTS ──
+function laneHTML(lane,label,sides){
+  return `<div class="now-lane"><div class="now-lane-h"><span>Bahn ${lane}</span><span>${label}</span></div>${
+    sides.map((s,i)=>(i?'<div class="now-vs">gegen</div>':'')+
+      `<div class="now-t ${s.cls||''}">${ironSVG(s.t,s.col,'n')}<div class="now-nm">${esc(s.t.name)}${s.sub?`<small>${s.sub}</small>`:''}</div><div class="now-v${s.val===null?' ln-empty':''}">${s.val!==null?ft(s.val):'—'}</div></div>`).join('')
+  }</div>`;
+}
+function nowVrHTML(){
+  const h=vrHeat(); if(!h) return '';
+  if(h.done) return `<div class="now-done">✓ Vorrunde beendet – die besten ${koSizeEff()} Teams ziehen in die K.-o.-Runde ein.</div>`;
+  const ck=h.run==='run2'?'c2':'c1', runNo=h.run==='run2'?2:1;
+  const side=(t,j)=>({t,col:t[ck]||PLAY_COLORS[j].h,sub:runNo===2&&pt(t.run1)!==null?'Lauf 1: '+ft(pt(t.run1)):'',val:pt(t[h.run])});
+  const A=h.grp.slice(0,2).map((t,j)=>side(t,j)), B=h.grp.slice(2,4).map((t,j)=>side(t,j+2));
+  return `<div class="now-head"><span class="now-title">Jetzt auf dem Eis</span><span class="now-sub">Vorrunde · Lauf ${runNo} · Gruppe ${h.g+1} von ${h.total}</span></div>
+    <div class="now-grid">${laneHTML('A','Rot gegen Gelb',A)}${B.length?laneHTML('B','Blau gegen Grün',B):''}</div>
+    ${h.next.length?`<div class="now-next">Danach: <b>${h.next.map(t=>esc(t.name)).join(' · ')}</b></div>`:''}`;
+}
+function nowKoHTML(K){
+  const fin=K.final, nm=id=>esc((teamById(id)||{}).name||'');
+  if(fin.w!=null){
+    const st=koStandings(false), third=st.filter(x=>x.platz===3).map(x=>esc(x.t.name)).join(' & ');
+    return `<div class="champ"><div class="champ-k">🏆 Cupsieger 2026</div><div class="champ-n">${nm(fin.w)}</div>
+      <div class="champ-pod"><span>🥈 ${nm(fin.l)}</span>${third?`<span>🥉 ${third}</span>`:''}<span>Finale ${ft(fin.da)} : ${ft(fin.db)}</span></div></div>`
+      + (K.p3&&K.p3.ready&&K.p3.w==null?`<div class="now-next">Das Spiel um Platz 3 läuft noch.</div>`:'');
+  }
+  const {cur,pair,next}=koNowPair(K); if(!cur) return '';
+  const seedOf=id=>ko.seeds.indexOf(id)+1;
+  const cards=pair.map(m=>{
+    const cols=LANE_COLORS[m.lane];
+    const side=(id,val,c)=>{ const t=teamById(id)||{id:0,name:'?',emoji:'❔',color:'#64748b'}; return {t,col:c.h,sub:'Nr. '+seedOf(id)+' der Vorrunde',val,cls:m.w!=null?(m.w===id?'win':'lose'):''}; };
+    return laneHTML(m.lane,koMatchLabel(m,K)+(m.tie?' · Stechen':''),[side(m.a,m.da,cols[0]),side(m.b,m.db,cols[1])]);
+  }).join('');
+  let nx='';
+  if(next.length) nx=next.map(m=>nm(m.a)+' – '+nm(m.b)).join(' · ');
+  else if(cur.n>1) nx=K.rounds[cur.r+1].name;
+  return `<div class="now-head"><span class="now-title">Jetzt auf dem Eis</span><span class="now-sub">K.-o.-Runde · ${cur.name}</span></div>
+    <div class="now-grid">${cards}</div>${nx?`<div class="now-next">Danach: <b>${nx}</b></div>`:''}`;
+}
+function bracketHTML(K){
+  const cur=koCurrentRound(K), curR=cur?cur.r:-1, liveKeys=new Set(koNowPair(K).pair.filter(m=>m.w==null).map(m=>m.key));
+  const seedOf=id=>ko.seeds.indexOf(id)+1;
+  const card=(m,label)=>{
+    const side=(id,val,ph)=>{
+      const t=id!=null?teamById(id):null, cls=m.w!=null?(m.w===id?' win':' lose'):'';
+      return `<div class="kb-s${cls}"><span class="kb-seed">${t?seedOf(id):''}</span><span class="kb-av">${t?emblInner(t,26,0):''}</span><span class="kb-nm${t?'':' tbd'}">${t?esc(t.name):ph}</span><span class="kb-v">${val!==null?ft(val):''}</span></div>`;
+    };
+    const live=liveKeys.has(m.key);
+    return `<div class="kb-m${live?' live':''}"><div class="kb-m-h"><span>${label}</span><span>${live?'läuft':(m.tie?'Stechen':'')}</span></div>${side(m.a,m.da,m.pa)}${side(m.b,m.db,m.pb)}</div>`;
+  };
+  const cols=K.rounds.map(R=>{
+    const done=R.matches.every(m=>m.w!=null), d=R.matches.filter(m=>m.w!=null).length;
+    const order=R.r===curR?0:(curR>=0&&R.r>curR?1+R.r:100+(K.rounds.length-R.r));
+    let ms=R.matches.map(m=>card(m,(R.n===1?'Finale':'Spiel '+(m.i+1))+' · Bahn '+m.lane)).join('');
+    if(R.n===1&&K.p3) ms+=card(K.p3,'Spiel um Platz 3 · Bahn B');
+    const st=done?'✓ beendet':(R.r===curR?(R.n>1?d+' von '+R.n+' Spielen':'läuft'):'');
+    return `<div class="kb-round" style="order:${order}"><div class="kb-round-h">${R.name}<span class="${R.r===curR?'live':''}">${st}</span></div><div class="kb-ms">${ms}</div></div>`;
+  }).join('');
+  return `<div class="rk-title">Turnierbaum · Top ${ko.size}</div><div class="kb-rounds">${cols}</div>`;
+}
+function koRankHTML(){
+  let cut=false;
+  return koStandings(false).map(x=>{
+    const t=x.t, s=sum(t);
+    let pre='';
+    if(x.stage==='Vorrunde'&&!cut){ cut=true; pre=`<div class="rk-cut"><span>Nach der Vorrunde ausgeschieden</span></div>`; }
+    const pos=x.platz===1?'🥇':x.platz===2?'🥈':x.platz===3?'🥉':(x.platz!=null?x.platz:'•');
+    const cls=x.platz&&x.platz<=3?'p'+x.platz:(x.alive?'':'out');
+    const chip=x.alive?`<span class="rk-run alive">${x.stage==='Spiel um Platz 3'?x.stage:'im '+x.stage}</span>`
+      :x.platz===1?`<span class="rk-run gold">🏆 Cupsieger</span>`
+      :`<span class="rk-run stage">${x.stage}${x.platz==null&&x.range?' · Platz '+x.range:''}</span>`;
+    return pre+`<div class="rk-row ${cls}" style="--tc:${x.platz===1?'#fbbf24':(x.alive?'#22c55e':'#334155')}">
+      <div class="rk-pos">${pos}</div>
+      <div class="rk-av">${emblInner(t,46,0)}</div>
+      <div style="min-width:0">
+        <div class="rk-name">${esc(t.name)}</div>
+        <div class="rk-runs">${chip}</div>
+      </div>
+      <div class="rk-sum"><div class="rk-sum-v">${s!==null?ft(s):'—'}</div><div class="rk-sum-l">Vorrunde${x.vr&&x.stage!=='Vorrunde'?' · Platz '+x.vr:''}</div></div>
+    </div>`;
+  }).join('');
+}
 function renderResults(){
   updateRunChip();
+  const K=ko?koRounds():null, finalDone=!!(K&&K.final.w!=null);
   const urkundeBtn=document.getElementById('urkundeBtn');
   const allDone=teams.length>0 && teams.every(t=>pt(t.run1)!==null && pt(t.run2)!==null);
-  if(urkundeBtn){ urkundeBtn.disabled=!allDone; urkundeBtn.title=allDone?'Urkunden für alle Teams':'Erst wenn alle Ergebnisse vorliegen'; }
+  const canCert=K?finalDone:allDone;
+  if(urkundeBtn){ urkundeBtn.disabled=!canCert; urkundeBtn.title=canCert?'Urkunden für alle Teams':(K?'Erst wenn das Finale entschieden ist':'Erst wenn alle Ergebnisse vorliegen'); }
   const r=ranked();
   const lanes=document.getElementById('trackLanes'), rl=document.getElementById('rankList');
   const withKey=r.filter(t=>tier(t)===0);
+  const setStat=(id,l,v)=>{ document.getElementById(id+'L').textContent=l; const e=document.getElementById(id); e.textContent=v; e.style.fontSize=(K&&String(v).length>10&&window.innerWidth<=640)?'.78rem':''; };
   document.getElementById('statTeams').textContent=teams.length;
-  document.getElementById('statLeader').textContent=withKey.length?withKey[0].name:'—';
-  document.getElementById('statBest').textContent=withKey.length?ft(sortKey(withKey[0])):'—';
+  if(K){
+    const cur=koCurrentRound(K);
+    if(finalDone){ setStat('statLeader','Cupsieger',(teamById(K.final.w)||{}).name||'—'); setStat('statBest','Siegerwurf',ft(Math.min(K.final.da,K.final.db))); }
+    else { setStat('statLeader','Runde',cur?cur.name:'—'); setStat('statBest','Noch dabei',koAlive(K)+' Teams'); }
+  } else {
+    setStat('statLeader','Führend',withKey.length?withKey[0].name:'—');
+    setStat('statBest','Bestwert Σ',withKey.length?ft(sortKey(withKey[0])):'—');
+  }
+  document.getElementById('rinkBox').style.display=K?'none':'';
+  document.getElementById('nowBox').innerHTML=K?nowKoHTML(K):nowVrHTML();
+  document.getElementById('koBox').innerHTML=K?bracketHTML(K):'';
+  document.getElementById('rkTitle').textContent=K?'Gesamtwertung':'Rangliste Vorrunde';
   if(!r.length){ lanes.innerHTML=`<div class="rk-empty" style="color:#5b7894">Noch keine Mannschaften</div>`; rl.innerHTML=''; return; }
+  if(K){ rl.innerHTML=koRankHTML(); return; }
 
   // Position nach echtem Abstand: 0 cm = Spitze an der Linie, schlechtester Wert bei 15 %
   const maxK=Math.max(...withKey.map(sortKey),0);
@@ -1068,6 +1551,7 @@ function renderResults(){
     lanes.querySelectorAll('.iron-wrap').forEach(el=>{ const p=el.dataset.pct+'%'; el.style.left=p; el.style.transform=`translateX(-${p})`; });
   }));
 
+  const qn=koSizeEff(), showCut=qn>0 && r.length>qn;
   rl.innerHTML=r.map((t,i)=>{
     const r1=pt(t.run1), r2=pt(t.run2), s=sum(t), k=sortKey(t), rank=i+1;
     const cls = tier(t)===0 && rank<=3 ? 'p'+rank : '';
@@ -1083,7 +1567,7 @@ function renderResults(){
         </div>
       </div>
       <div class="rk-sum"><div class="rk-sum-v">${s!==null?ft(s):'—'}</div><div class="rk-sum-l">Summe</div></div>
-    </div>`;
+    </div>`+(showCut&&rank===qn?`<div class="rk-cut"><span>↑ Top ${qn} ziehen in die K.-o.-Runde ein</span></div>`:'');
   }).join('');
 }
 
@@ -1095,8 +1579,8 @@ function shade(hex,amt){
   r=Math.round((f-r)*p+r); g=Math.round((f-g)*p+g); b=Math.round((f-b)*p+b);
   return `rgb(${r},${g},${b})`;
 }
-function ironSVG(t){
-  const c=playColor(t), u='i'+t.id;
+function ironSVG(t,col,uid){
+  const c=col||playColor(t), u='i'+(uid||'')+t.id;
   const hi=shade(c,.45), mid=c, lo=shade(c,-.45);
   const photo=photoCacheGet(t.id)||t.photo||t.photoThumb;
   const embl = photo
@@ -1250,44 +1734,68 @@ function ensurePoppins(doc){}
 const PFONT=()=>'helvetica';
 
 function getPdfData(){
-  const r=ranked();
-  return r.map((t,i)=>{
+  const mk=(t,platz,platzTxt,stage)=>{
     const s=sum(t), r1=pt(t.run1), r2=pt(t.run2);
-    return { platz:i+1, name:t.name, lauf1:r1!==null?ft(r1):'—', lauf2:r2!==null?ft(r2):'—', summe:s!==null?ft(s):'—', color:t.color, emoji:t.emoji, photo:t.photo||null };
-  });
+    return { platz, platzTxt, stage, name:t.name, lauf1:r1!==null?ft(r1):'—', lauf2:r2!==null?ft(r2):'—', summe:s!==null?ft(s):'—', color:t.color, emoji:t.emoji, photo:t.photo||null };
+  };
+  if(ko) return koStandings(true).map(x=>mk(x.t,x.platz,x.platz!=null?x.platz+'.':(x.range||'–'),x.stage));
+  return ranked().map((t,i)=>mk(t,i+1,(i+1)+'.',''));
 }
 
+function pdfHead(doc,W,sub,accent){
+  const dateStr='2. Dezember 2026';
+  doc.setFillColor(10,20,50); doc.rect(0,0,W,52,'F');
+  doc.setFillColor(...accent); doc.rect(0,50,W,3,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(255,255,255);
+  doc.text('BÜGELEISENCUP 2026', W-14, 22, {align:'right'});
+  doc.setFontSize(11); doc.setTextColor(180,200,230);
+  doc.text(sub+' · RC Riesa-Elbland', W-14, 32, {align:'right'});
+  doc.setFontSize(9); doc.setTextColor(100,130,180);
+  doc.text(dateStr, W-14, 42, {align:'right'});
+  return dateStr;
+}
 async function downloadStartaufstellung(){
   const { jsPDF }=window.jspdf;
   if(!jsPDF){ alert('PDF-Bibliothek wird noch geladen, bitte kurz warten.'); return; }
   if(!teams.length){ alert('Noch keine Mannschaften vorhanden.'); return; }
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  const W=doc.internal.pageSize.getWidth();
-  doc.setFillColor(10,20,50); doc.rect(0,0,W,52,'F');
-  doc.setFillColor(16,185,129); doc.rect(0,50,W,3,'F');
-  const dateStr='2. Dezember 2026';
-  doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(255,255,255);
-  doc.text('BÜGELEISENCUP 2026', W-14, 22, {align:'right'});
-  doc.setFontSize(11); doc.setTextColor(180,200,230);
-  doc.text('Startaufstellung · RC Riesa-Elbland', W-14, 32, {align:'right'});
-  doc.setFontSize(9); doc.setTextColor(100,130,180);
-  doc.text(dateStr, W-14, 42, {align:'right'});
-  doc.setFillColor(16,185,129); doc.rect(0,55,W,10,'F');
-  doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(255,255,255);
-  doc.text('STARTREIHENFOLGE', W/2, 61.5, {align:'center'});
-  const rows=teams.map((t,i)=>[String(i+1)+'.', t.name]);
+  const W=doc.internal.pageSize.getWidth(), GREEN=[16,185,129];
+  const band=txt=>{ doc.setFillColor(...GREEN); doc.rect(0,55,W,10,'F'); doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(255,255,255); doc.text(txt, W/2, 61.5, {align:'center'}); };
+  const dateStr=pdfHead(doc,W,'Spielplan',GREEN);
+  band('VORRUNDE · 2 LÄUFE · JE 4 TEAMS AUF 2 BAHNEN');
+  const rows=teams.map((t,i)=>[i%4===0?String(i/4+1):'', laneOf(i), colorName(t.c1)||PLAY_COLORS[i%4].n, t.name]);
   doc.autoTable({
-    startY:68, head:[['Start','Mannschaft']], body:rows, theme:'grid',
-    headStyles:{fillColor:[10,20,50],textColor:[180,200,230],fontStyle:'bold',fontSize:10,cellPadding:4,lineColor:[16,185,129],lineWidth:0.3},
-    bodyStyles:{fontSize:11,cellPadding:5,textColor:[30,41,59]},
-    alternateRowStyles:{fillColor:[240,253,250]},
-    columnStyles:{0:{cellWidth:20,halign:'center',fontStyle:'bold'},1:{cellWidth:'auto'}},
+    startY:68, head:[['Gruppe','Bahn','Farbe','Mannschaft']], body:rows, theme:'grid',
+    headStyles:{fillColor:[10,20,50],textColor:[180,200,230],fontStyle:'bold',fontSize:10,cellPadding:3.5,lineColor:GREEN,lineWidth:0.3},
+    bodyStyles:{fontSize:10.5,cellPadding:3.2,textColor:[30,41,59]},
+    columnStyles:{0:{cellWidth:20,halign:'center',fontStyle:'bold'},1:{cellWidth:18,halign:'center'},2:{cellWidth:24,halign:'center'},3:{cellWidth:'auto',fontStyle:'bold'}},
+    didParseCell(d){ if(d.section==='body') d.cell.styles.fillColor=Math.floor(d.row.index/4)%2?[236,253,245]:[255,255,255]; },
     margin:{left:14,right:14}
   });
-  const finalY=doc.lastAutoTable.finalY+8;
-  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(148,163,184);
-  doc.text(`Erstellt am ${dateStr} · Bügeleisencup 2026 · RC Riesa-Elbland`, W/2, finalY, {align:'center'});
-  doc.save('Buegeleisencup-2026-Startaufstellung.pdf');
+  let y=doc.lastAutoTable.finalY+7;
+  const qn=koSizeEff();
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(71,85,105);
+  if(qn) doc.text(`Die besten ${qn} Teams (kleinste Summe aus beiden Läufen) ziehen in die K.-o.-Runde ein: 1. gegen ${qn}., 2. gegen ${qn-1}. usw.`, W/2, y, {align:'center', maxWidth:W-28});
+  doc.setFontSize(8); doc.setTextColor(148,163,184);
+  doc.text(`Erstellt am ${dateStr} · Bügeleisencup 2026 · RC Riesa-Elbland`, W/2, y+8, {align:'center'});
+  if(ko){
+    const K=koRounds(), seedOf=id=>ko.seeds.indexOf(id)+1;
+    const nm=(id,ph)=>{ const t=id!=null?teamById(id):null; return t?seedOf(id)+'. '+t.name:ph; };
+    doc.addPage('a4','portrait');
+    pdfHead(doc,W,'Spielplan',GREEN);
+    band('K.-O.-RUNDE · TOP '+ko.size);
+    const kr=[];
+    K.rounds.forEach(R=>R.matches.forEach(m=>kr.push([m.i===0?R.name:'', R.n===1?'':String(m.i+1), m.lane, nm(m.a,m.pa), nm(m.b,m.pb)])));
+    if(K.p3) kr.push(['Spiel um Platz 3','','B',nm(K.p3.a,K.p3.pa),nm(K.p3.b,K.p3.pb)]);
+    doc.autoTable({
+      startY:68, head:[['Runde','Spiel','Bahn','Rot (Bahn A) / Blau (Bahn B)','Gelb (Bahn A) / Grün (Bahn B)']], body:kr, theme:'grid',
+      headStyles:{fillColor:[10,20,50],textColor:[180,200,230],fontStyle:'bold',fontSize:8.5,cellPadding:3,lineColor:GREEN,lineWidth:0.3},
+      bodyStyles:{fontSize:10,cellPadding:3,textColor:[30,41,59]},
+      columnStyles:{0:{cellWidth:34,fontStyle:'bold'},1:{cellWidth:14,halign:'center'},2:{cellWidth:14,halign:'center'}},
+      margin:{left:14,right:14}
+    });
+  }
+  doc.save('Buegeleisencup-2026-Spielplan.pdf');
 }
 
 async function downloadErgebnisse(){
@@ -1303,16 +1811,19 @@ async function downloadErgebnisse(){
   doc.setFont(PFONT(),'bold'); doc.setFontSize(20); doc.setTextColor(240,242,245);
   doc.text('Bügeleisencup 2026', W-14, 22, {align:'right'});
   doc.setFontSize(10); doc.setFont(PFONT(),'normal'); doc.setTextColor(148,163,184);
-  doc.text('Rotary Club Riesa-Elbland · Endergebnisse', W-14, 32, {align:'right'});
+  doc.text('Rotary Club Riesa-Elbland · '+(ko&&koRounds().final.w==null?'Zwischenstand':'Endergebnisse'), W-14, 32, {align:'right'});
   const dateStr='2. Dezember 2026';
   doc.text(dateStr, W-14, 42, {align:'right'});
+  const koMode=!!ko;
   doc.autoTable({
-    startY:48, head:[['Platz','Mannschaft','Lauf 1','Lauf 2','Summe']],
-    body:data.map(d=>[d.platz+'.', d.name, d.lauf1, d.lauf2, d.summe]),
-    styles:{font:PFONT(),fontSize:11,cellPadding:4,lineColor:[226,232,240],lineWidth:0.3},
-    headStyles:{fillColor:[10,20,50],textColor:[240,242,245],fontStyle:'bold',fontSize:10,halign:'center',font:PFONT(),lineWidth:0},
+    startY:48, head:[koMode?['Platz','Mannschaft','Lauf 1','Lauf 2','Summe','K.-o.-Runde']:['Platz','Mannschaft','Lauf 1','Lauf 2','Summe']],
+    body:data.map(d=>koMode?[d.platzTxt, d.name, d.lauf1, d.lauf2, d.summe, d.stage]:[d.platzTxt, d.name, d.lauf1, d.lauf2, d.summe]),
+    styles:{font:PFONT(),fontSize:koMode?9.5:11,cellPadding:koMode?3:4,lineColor:[226,232,240],lineWidth:0.3},
+    headStyles:{fillColor:[10,20,50],textColor:[240,242,245],fontStyle:'bold',fontSize:koMode?9:10,halign:'center',font:PFONT(),lineWidth:0},
     tableLineColor:[226,232,240], tableLineWidth:0.3,
-    columnStyles:{0:{halign:'center',cellWidth:22,fontStyle:'bold'},1:{halign:'left',fontStyle:'bold'},2:{halign:'center',cellWidth:28,font:PFONT()},3:{halign:'center',cellWidth:28,font:PFONT()},4:{halign:'center',cellWidth:32,font:PFONT(),fontStyle:'bold',textColor:[180,83,9]}},
+    columnStyles:koMode
+      ?{0:{halign:'center',cellWidth:16,fontStyle:'bold'},1:{halign:'left',fontStyle:'bold'},2:{halign:'center',cellWidth:23},3:{halign:'center',cellWidth:23},4:{halign:'center',cellWidth:25,fontStyle:'bold'},5:{halign:'center',cellWidth:34,fontStyle:'bold',textColor:[180,83,9]}}
+      :{0:{halign:'center',cellWidth:22,fontStyle:'bold'},1:{halign:'left',fontStyle:'bold'},2:{halign:'center',cellWidth:28,font:PFONT()},3:{halign:'center',cellWidth:28,font:PFONT()},4:{halign:'center',cellWidth:32,font:PFONT(),fontStyle:'bold',textColor:[180,83,9]}},
     alternateRowStyles:{fillColor:[248,250,252]},
     didParseCell(d){ if(d.section==='body'&&d.row.index===0) d.cell.styles.fillColor=[254,252,232]; if(d.section==='body'&&d.row.index===1) d.cell.styles.fillColor=[248,250,252]; },
     margin:{left:14,right:14}
@@ -1401,6 +1912,7 @@ function drawUrkunde(doc, team, W, H, dateStr){
   const pw=doc.getTextWidth(platz)+2*(platz.length-1)+20;
   doc.setFillColor(...GOLD); doc.roundedRect(W/2-pw/2, y, pw, 11, 5.5, 5.5, 'F');
   doc.setTextColor(...NAVY); doc.text(platz, W/2-(pw-20)/2, y+7.6, {charSpace:2});
+  if(team.stage){ const st=team.stage==='Cupsieger'?'CUPSIEGER 2026':team.stage==='Finale'?'FINALIST':team.stage==='Vorrunde'?'VORRUNDE':team.stage.toUpperCase(); spaced(st, y+17, 8, 1.6, GOLD); }
 
   // Ergebnis-Kacheln: Lauf 1 | Lauf 2 | Summe
   y+=20;
@@ -1416,7 +1928,7 @@ function drawUrkunde(doc, team, W, H, dateStr){
     doc.text(val, x+cw/2, y+18, {align:'center'});
   });
   doc.setFont(PFONT(),'normal'); doc.setFontSize(8); doc.setTextColor(120,140,180);
-  doc.text('Abstand zur Markierung – je kleiner, desto besser', W/2, y+ch+6, {align:'center'});
+  doc.text((team.stage?'Vorrunde: ':'')+'Abstand zur Markierung – je kleiner, desto besser', W/2, y+ch+6, {align:'center'});
 
   // Pokal
   const ty=y+ch+11, maxH=H-ty-12;
