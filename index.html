@@ -421,7 +421,9 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 .now-lane::before { content:''; position:absolute; left:0; right:0; top:0; height:5px; background:linear-gradient(90deg,#1d4ed8,#3b82f6,#1d4ed8); opacity:.75; }
 .now-lane-h { display:flex; justify-content:space-between; gap:8px; font-size:.62rem; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:#46627f; margin-bottom:4px; }
 .now-lane-h span:last-child { color:#7c93ab; text-align:right; }
-.now-t { display:grid; grid-template-columns:84px 1fr auto; align-items:center; gap:10px; padding:3px 0; }
+.now-t { display:grid; grid-template-columns:14px 84px 1fr auto; align-items:center; gap:10px; padding:3px 0; }
+.now-dot { width:14px; height:14px; border-radius:50%; border:1.5px solid rgba(15,40,70,.35); box-shadow:0 1px 2px rgba(0,0,0,.25); display:block; }
+.now-lane-h span:last-child { color:#b45309; }
 .now-t svg { width:84px; height:42px; display:block; overflow:visible; }
 .now-nm { font-size:.9rem; font-weight:700; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .now-nm small { display:block; font-size:.64rem; font-weight:600; color:#5b7894; overflow:hidden; text-overflow:ellipsis; }
@@ -429,7 +431,7 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 .now-v.ln-empty { color:#7c93ab; font-weight:500; }
 .now-t.win .now-v { background:#16a34a; border-color:#15803d; color:#fff; }
 .now-t.lose { opacity:.6; }
-.now-vs { font-size:.56rem; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:#7c93ab; padding-left:22px; }
+.now-vs { font-size:.56rem; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:#7c93ab; padding-left:46px; }
 .now-next { margin-top:12px; font-size:.86rem; color:var(--dim); line-height:1.5; max-width:640px; }
 .now-next b { color:#b8c6da; font-weight:600; }
 .now-next-l { font-size:.66rem; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:#b8c6da; margin-bottom:7px; }
@@ -481,7 +483,9 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 @media (max-width:640px){
   .now, .kb { padding:0 10px; }
   .now-grid { grid-template-columns:1fr; }
-  .now-t { grid-template-columns:72px 1fr auto; gap:8px; }
+  .now-t { grid-template-columns:12px 72px 1fr auto; gap:8px; }
+  .now-dot { width:12px; height:12px; }
+  .now-vs { padding-left:38px; }
   .now-t svg { width:72px; height:36px; }
   .champ-n { font-size:1.35rem; }
 }
@@ -1456,9 +1460,9 @@ function updateRunChip(){
 
 // ── RESULTS ──
 function laneHTML(title,label,sides){
-  return `<div class="now-lane"><div class="now-lane-h"><span>${title}</span><span>${label}</span></div>${
+  return `<div class="now-lane"><div class="now-lane-h"><span>${title}</span><span>${label||''}</span></div>${
     sides.map((s,i)=>(i?'<div class="now-vs">gegen</div>':'')+
-      `<div class="now-t ${s.cls||''}">${ironSVG(s.t,s.col,'n')}<div class="now-nm">${esc(s.t.name)}${s.sub?`<small>${s.sub}</small>`:''}</div><div class="now-v${s.val===null?' ln-empty':''}">${s.val!==null?ft(s.val):'—'}</div></div>`).join('')
+      `<div class="now-t ${s.cls||''}"><i class="now-dot" style="background:${s.col}" title="${colorName(s.col)}"></i>${ironSVG(s.t,s.col,'n')}<div class="now-nm">${esc(s.t.name)}${s.sub?`<small>${s.sub}</small>`:''}</div><div class="now-v${s.val===null?' ln-empty':''}">${s.val!==null?ft(s.val):'—'}</div></div>`).join('')
   }</div>`;
 }
 function nextHTML(items){ return `<div class="now-next"><div class="now-next-l">Als Nächstes auf dem Eis</div><div class="nx-chips">${items.join('')}</div></div>`; }
@@ -1467,9 +1471,9 @@ function nowVrHTML(){
   if(h.done) return `<div class="now-done">✓ Vorrunde beendet – die besten ${koSizeEff()} Teams ziehen in die K.-o.-Runde ein.</div>`;
   const ck=h.run==='run2'?'c2':'c1', runNo=h.run==='run2'?2:1;
   const side=(t,j)=>({t,col:t[ck]||groupColor(j).h,sub:runNo===2&&pt(t.run1)!==null?'Lauf 1: '+ft(pt(t.run1)):'',val:pt(t[h.run])});
-  const all=h.grp.map((t,j)=>side(t,j)), cols=h.grp.map((t,j)=>colorName(t[ck])||groupColor(j).n).join(' · ');
+  const all=h.grp.map((t,j)=>side(t,j));
   return `<div class="now-head"><span class="now-title">Jetzt auf dem Eis</span><span class="now-sub">Vorrunde · Lauf ${runNo} · Gruppe ${h.g+1} von ${h.total}</span></div>
-    <div class="now-grid one">${laneHTML('Gruppe '+(h.g+1),cols,all)}</div>
+    <div class="now-grid one">${laneHTML('Gruppe '+(h.g+1),'',all)}</div>
     ${h.next.length?nextHTML(h.next.map((t,j)=>`<span class="nx-chip"><i style="background:${t[ck]||groupColor(j).h}"></i>${esc(t.name)}</span>`)):''}`;
 }
 function nowKoHTML(K){
@@ -1485,7 +1489,7 @@ function nowKoHTML(K){
   const cards=pair.map(m=>{
     const cols=KO_COLORS;
     const side=(id,val,c)=>{ const t=teamById(id)||{id:0,name:'?',emoji:'❔',color:'#64748b'}; return {t,col:c.h,sub:'Nr. '+seedOf(id)+' der Vorrunde',val,cls:m.w!=null?(m.w===id?'win':'lose'):''}; };
-    return laneHTML(koMatchLabel(m,K),'Rot gegen Gelb'+(m.tie?' · Stechen':''),[side(m.a,m.da,cols[0]),side(m.b,m.db,cols[1])]);
+    return laneHTML(koMatchLabel(m,K),m.tie?'Stechen':'',[side(m.a,m.da,cols[0]),side(m.b,m.db,cols[1])]);
   }).join('');
   let nx='';
   if(next.length) nx=nextHTML(next.map(m=>`<span class="nx-chip">${m.isP3||m.n===1?`<em>${koMatchLabel(m,K)}</em>`:''}${m.ready?`<span class="nx-t"><i style="background:${KO_COLORS[0].h}"></i>${nm(m.a)}</span><span class="nx-vs">gegen</span><span class="nx-t"><i style="background:${KO_COLORS[1].h}"></i>${nm(m.b)}</span>`:''}</span>`));
