@@ -963,8 +963,9 @@ function gotoPage(p,el){
 }
 
 // ── SPIELFARBEN (Farbe der Bügeleisen je Lauf) ──
-const PLAY_COLORS=[{n:'Rot',h:'#dc2626'},{n:'Gelb',h:'#facc15'},{n:'Blau',h:'#2563eb'},{n:'Grün',h:'#16a34a'}];
-const colorName=h=>(PLAY_COLORS.find(c=>c.h===h)||{}).n||'';
+// Drei Spielfarben – je Gruppe spielen 3 Teams gleichzeitig (Grün nur noch für ältere Spielstände benannt)
+const PLAY_COLORS=[{n:'Rot',h:'#dc2626'},{n:'Gelb',h:'#facc15'},{n:'Blau',h:'#2563eb'}];
+const colorName=h=>(PLAY_COLORS.concat([{n:'Grün',h:'#16a34a'}]).find(c=>c.h===h)||{}).n||'';
 function swatchRow(t,key){
   const sel=t[key]||'';
   return `<div class="sw-row">${PLAY_COLORS.map(c=>{
