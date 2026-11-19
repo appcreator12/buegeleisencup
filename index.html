@@ -973,6 +973,14 @@ function swatchRow(t,key){
     return `<button type="button" class="sw${sel===c.h?' sel':''}" style="background:${c.h};--ck:${light?'#111':'#fff'}" title="${c.n}" onclick="setPlayColor(${t.id},'${key}','${c.h}')"></button>`;
   }).join('')}</div><div class="sw-label">${sel?'Spielfarbe: '+colorName(sel):'Spielfarbe wählen'}</div>`;
 }
+// Kennzeichen unter dem Teamnamen: die tatsächlich gewählte Spielfarbe (bei Lauf 1 ≠ Lauf 2 beide)
+function colorTag(t){
+  const dot=h=>`<i style="background:${h}"></i>`;
+  if(!t.c1&&!t.c2) return `<span class="lane-tag" style="color:#94a3b8;border-style:dashed">Farbe offen</span>`;
+  if(t.c1&&t.c2&&t.c1!==t.c2) return `<span class="lane-tag">${dot(t.c1)}L1 ${colorName(t.c1)} · ${dot(t.c2)}L2 ${colorName(t.c2)}</span>`;
+  const h=t.c1||t.c2;
+  return `<span class="lane-tag">${dot(h)}${colorName(h)}${t.c1&&t.c2?'':(t.c1?' (Lauf 1)':' (Lauf 2)')}</span>`;
+}
 function setPlayColor(id,key,h){
   const t=teams.find(x=>x.id===id); if(!t) return;
   t[key]= t[key]===h ? null : h;   // erneutes Tippen hebt Auswahl auf
@@ -1241,7 +1249,7 @@ function renderTeamList(){
       </div>
       <div>
         <input class="team-name-inp" id="nm-${t.id}" value="${t.name}" onchange="renameTeam(${t.id},this.value)" title="Name bearbeiten">
-        <div class="team-badge" style="color:${t.color}">${t.photo?'📷 Foto':t.emoji+' Emoji'}</div><span class="lane-tag"><i style="background:${groupColor(idx).h}"></i>${groupColor(idx).n}</span>
+        <div class="team-badge" style="color:${t.color}">${t.photo?'📷 Foto':t.emoji+' Emoji'}</div>${colorTag(t)}
       </div>
       <div class="dist-block">
         <div class="dist-label">Lauf 1 (cm)</div>
