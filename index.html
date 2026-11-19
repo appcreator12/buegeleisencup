@@ -430,8 +430,15 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 .now-t.win .now-v { background:#16a34a; border-color:#15803d; color:#fff; }
 .now-t.lose { opacity:.6; }
 .now-vs { font-size:.56rem; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:#7c93ab; padding-left:22px; }
-.now-next { margin-top:9px; font-size:.74rem; color:var(--dim); line-height:1.5; }
+.now-next { margin-top:12px; font-size:.86rem; color:var(--dim); line-height:1.5; max-width:640px; }
 .now-next b { color:#b8c6da; font-weight:600; }
+.now-next-l { font-size:.66rem; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; color:#b8c6da; margin-bottom:7px; }
+.nx-chips { display:flex; flex-wrap:wrap; gap:7px; }
+.nx-chip { display:inline-flex; align-items:center; gap:7px; flex-wrap:wrap; font-size:.95rem; font-weight:700; color:#fff; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:7px 12px; line-height:1.25; }
+.nx-chip i { width:11px; height:11px; border-radius:50%; flex:0 0 11px; border:1px solid rgba(0,0,0,.35); }
+.nx-chip em { font-style:normal; font-size:.68rem; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#fbbf24; margin-right:2px; }
+.nx-t { display:inline-flex; align-items:center; gap:7px; }
+.nx-vs { font-size:.66rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#7c93ab; }
 .now-done { border-radius:16px; padding:14px 16px; font-size:.84rem; font-weight:600; color:#bbf7d0; background:rgba(34,197,94,.1); border:1px solid rgba(34,197,94,.3); }
 .champ { border-radius:20px; padding:22px 16px; text-align:center; border:1px solid rgba(251,191,36,.4); background:linear-gradient(180deg,rgba(251,191,36,.16),rgba(251,191,36,.04)); }
 .champ-k { font-size:.68rem; letter-spacing:2px; text-transform:uppercase; font-weight:800; color:#fbbf24; }
@@ -484,6 +491,19 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 .ln-head { height:auto; min-height:22px; padding-top:2px; padding-bottom:2px; }
 .rs-ellip { font-size:.85rem; }
 @media (max-width:640px){ .rs-ellip { font-size:.74rem; } .rk-name { font-size:.84rem; } }
+
+/* Live-Ranking-Überschrift und Kopf-Kacheln */
+.rink-head { max-width:1100px; margin:26px auto 0; padding:0 20px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+.rink-title { font-size:.95rem; font-weight:800; letter-spacing:1.8px; text-transform:uppercase; color:#fbbf24; }
+.rink-head + .rink { margin-top:10px; }
+.rs-ellip { overflow-wrap:normal; word-break:normal; hyphens:manual; }
+@media (max-width:640px){
+  .rink-head { padding:0 12px; margin-top:22px; }
+  .rs-stats { grid-template-columns:1fr 1fr; }
+  .rs-stats .rs-stat:nth-child(1){ order:1; } .rs-stats .rs-stat:nth-child(3){ order:2; }
+  .rs-stats .rs-stat:nth-child(2){ order:3; grid-column:1 / -1; }
+  .rs-ellip { font-size:1.05rem !important; }
+}
 </style>
 </head>
 <body class="admin-mode">
@@ -544,6 +564,7 @@ body.results-mode, body:not(.admin-mode) { background:#060a13; }
 
   <section class="now" id="nowBox"></section>
 
+  <div class="rink-head" id="rinkHead"><span class="rink-title">Live-Ranking</span><span class="now-sub">Vorrunde · Summe aus Lauf 1 und Lauf 2 · kleinster Abstand führt</span></div>
   <section class="rink" id="rinkBox">
     <div class="rink-legend"><span>Start</span><span>näher = besser →</span></div>
     <div class="goal">
@@ -1440,6 +1461,7 @@ function laneHTML(title,label,sides){
       `<div class="now-t ${s.cls||''}">${ironSVG(s.t,s.col,'n')}<div class="now-nm">${esc(s.t.name)}${s.sub?`<small>${s.sub}</small>`:''}</div><div class="now-v${s.val===null?' ln-empty':''}">${s.val!==null?ft(s.val):'—'}</div></div>`).join('')
   }</div>`;
 }
+function nextHTML(items){ return `<div class="now-next"><div class="now-next-l">Als Nächstes auf dem Eis</div><div class="nx-chips">${items.join('')}</div></div>`; }
 function nowVrHTML(){
   const h=vrHeat(); if(!h) return '';
   if(h.done) return `<div class="now-done">✓ Vorrunde beendet – die besten ${koSizeEff()} Teams ziehen in die K.-o.-Runde ein.</div>`;
@@ -1448,7 +1470,7 @@ function nowVrHTML(){
   const all=h.grp.map((t,j)=>side(t,j)), cols=h.grp.map((t,j)=>colorName(t[ck])||groupColor(j).n).join(' · ');
   return `<div class="now-head"><span class="now-title">Jetzt auf dem Eis</span><span class="now-sub">Vorrunde · Lauf ${runNo} · Gruppe ${h.g+1} von ${h.total}</span></div>
     <div class="now-grid one">${laneHTML('Gruppe '+(h.g+1),cols,all)}</div>
-    ${h.next.length?`<div class="now-next">Danach: <b>${h.next.map(t=>esc(t.name)).join(' · ')}</b></div>`:''}`;
+    ${h.next.length?nextHTML(h.next.map((t,j)=>`<span class="nx-chip"><i style="background:${t[ck]||groupColor(j).h}"></i>${esc(t.name)}</span>`)):''}`;
 }
 function nowKoHTML(K){
   const fin=K.final, nm=id=>esc((teamById(id)||{}).name||'');
@@ -1466,11 +1488,11 @@ function nowKoHTML(K){
     return laneHTML(koMatchLabel(m,K),'Rot gegen Gelb'+(m.tie?' · Stechen':''),[side(m.a,m.da,cols[0]),side(m.b,m.db,cols[1])]);
   }).join('');
   let nx='';
-  if(next.length) nx=next.map(m=>(m.isP3||m.n===1?koMatchLabel(m,K)+': ':'')+(m.ready?nm(m.a)+' – '+nm(m.b):'')).join(' · ');
-  else if(cur.n>1) nx=K.rounds[cur.r+1].name;
+  if(next.length) nx=nextHTML(next.map(m=>`<span class="nx-chip">${m.isP3||m.n===1?`<em>${koMatchLabel(m,K)}</em>`:''}${m.ready?`<span class="nx-t"><i style="background:${KO_COLORS[0].h}"></i>${nm(m.a)}</span><span class="nx-vs">gegen</span><span class="nx-t"><i style="background:${KO_COLORS[1].h}"></i>${nm(m.b)}</span>`:''}</span>`));
+  else if(cur.n>1) nx=nextHTML([`<span class="nx-chip">${K.rounds[cur.r+1].name}</span>`]);
   const subTxt=cur.n===1&&pair[0]?koMatchLabel(pair[0],K):cur.name;
   return `<div class="now-head"><span class="now-title">Jetzt auf dem Eis</span><span class="now-sub">K.-o.-Runde · ${subTxt}</span></div>
-    <div class="now-grid one">${cards}</div>${nx?`<div class="now-next">Danach: <b>${nx}</b></div>`:''}`;
+    <div class="now-grid one">${cards}</div>${nx}`;
 }
 function bracketHTML(K){
   const cur=koCurrentRound(K), curR=cur?cur.r:-1, liveKeys=new Set(koNowPair(K).pair.filter(m=>m.w==null).map(m=>m.key));
@@ -1536,6 +1558,7 @@ function renderResults(){
     setStat('statBest','Bestwert Σ',withKey.length?ft(sortKey(withKey[0])):'—');
   }
   document.getElementById('rinkBox').style.display=K?'none':'';
+  document.getElementById('rinkHead').style.display=K?'none':'';
   document.getElementById('nowBox').innerHTML=K?nowKoHTML(K):nowVrHTML();
   document.getElementById('koBox').innerHTML=K?bracketHTML(K):'';
   document.getElementById('rkTitle').textContent=K?'Gesamtwertung':'Rangliste Vorrunde';
